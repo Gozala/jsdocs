@@ -1,0 +1,14 @@
+{
+    "name": "JSDocs",
+    "author": "Irakli Gozalishvili",
+    "description": "A documentation generator for JavaScript. Based on jsdoc-toolkit.",
+    "js": "lib",
+    "license": ["MPL 1.1","GPL 2.0", "LGPL 2.1"],
+    "platform": ["rhino"],
+    "version": {
+        "label": "0.1",
+        "numeric": [0,1],
+        "status": "development"
+    }
+
+}
