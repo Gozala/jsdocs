@@ -25,8 +25,8 @@ exports.publish = function publish(symbolSet) {
     var classes = symbols.filter(function(symbol) {
         return (symbol.is('CONSTRUCTOR') || symbol.isNamespace);
     }).sort(makeSortby('alias'));
-    // Getting documented files
-    var documentedFiles = symbols.filter(function(symbol) {
+    // Getting files
+    var files = symbols.filter(function(symbol) {
         return symbol.is('FILE');
     });
     
@@ -78,6 +78,7 @@ exports.publish = function publish(symbolSet) {
             name: data.name,
             alias: data.alias,
             link: '#' + data.name,
+            classDesc: data.classDesc,
             // Class type
             isBuiltin: data.isBuiltin(),
             isConstructor: data.is('CONSTRUCTOR'),
@@ -91,7 +92,7 @@ exports.publish = function publish(symbolSet) {
             // Class extends
             inheritsFrom: data.augments.sort(),
             // Class summary
-            hasSummary: (!data.isBuiltin() && (data.isNamespace || data.isConstructor)),
+            hasSummary: (!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR'))),
             highlighted: (data.comment.getTag("hilited").length ? 'hilited' : ''),
             // constructor
             constructorLink: data.alias,
@@ -121,13 +122,10 @@ exports.publish = function publish(symbolSet) {
         };
     }).forEach(function(element) {
         var path = element.srcFile || '_global_';
-        Log.info(path + '.html');
-        docs[path + '.html'] = classTemplate.render(element);
+        docs[path + '.' + element.name + '.html'] = classTemplate.render(element);
     });
-
-    // Temporary it's a plugin but later docs will be just return value
-    // and the commit will happen behind the scenes
-    Plugins.commit(docs);
+    
+    return docs;
 };
 
 function makeSortby(key) {
