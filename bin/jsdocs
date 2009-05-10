@@ -103,7 +103,7 @@ function main() {
         }
     }
     //try {
-        require("jsdocs/jsdocs").generate(config);
+        require("jsdocs/jsdocs").document(config);
     //} catch (e) {
     //    print('ERROR: ' + e.message);
     //}
