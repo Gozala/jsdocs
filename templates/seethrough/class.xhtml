@@ -21,7 +21,7 @@
             </div>
             <span st:loop="element classes">
                 <div>
-                    <a href="#classLink" st:content="class.name">
+                    <a href="#classLink" st:content="element.name">
                         <st:attr name="href">element.link</st:attr>
                     </a>
                 </div>
@@ -54,12 +54,12 @@
                         <st:attr name="href">srcLink</st:attr>
                     </a>
                 </div>
+                
                 <div st:condition="author" class="author">
                     <br/>
                     <i>Author: </i>
                     <span st:content="author">Irakli Gozalishvili</span>
                 </div>
-
             </p>
             <table st:condition="hasSummary" id="constructorSummary" class="summaryTable" cellspacing="0" title="A summary of the constructor documented in this class">
                 <caption>
@@ -92,7 +92,7 @@
                                     <a st:content="constructorLink" href="#constructorLink" class="keyword">
                                         <st:attr name="href">constructorLink</st:attr>
                                     </a>
-                                    <span class="punctuation">(</span><span st:loop="param params"><span st:content="param.name" class="separated">param</span></span><span class="punctuation">)</span>
+                                    <span class="punctuation">(</span><span><span st:loop="param params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span>
                                 </code>
                                 <div st:content="desc" class="description">Contructor decription</div>
                             </div>
@@ -100,7 +100,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div st:condition="files.length" id="fieldSummary" class="fields">
+            <div st:condition="fields.length" id="fieldSummary" class="fields">
                 <table st:condition="ownFields.length" class="summaryTable" cellspacing="0" title="A summary of the fields documented in this class">
                     <caption>Field Summary</caption>
                     <thead>
@@ -121,10 +121,7 @@
                             </td>
                             <td class="nameDescription">
                                 <code class="code">
-                                    <a st:content="field.memberOf" href="#ownerLink">
-                                        <st:attr name="href">field.memberOf.link</st:attr>
-                                    </a>
-                                    <a st:content="field.alias" href="#fieldLink" class="keyword">
+                                    <a st:content="field.name" href="#fieldLink" class="keyword">
                                         <st:attr name="href">field.link</st:attr>
                                     </a>
                                 </code>
@@ -173,13 +170,10 @@
                             </td>
                             <td class="nameDescription">
                                 <code class="ignore-line-brakes">
-                                    <a st:content="method.memberOf" href="#methodOwnerLink">
-                                        <st:attr name="href">method.memberOf.link</st:attr>
-                                    </a>
-                                    <a st:content="method.alias" href="#methodLink" class="keyword">
+                                    <a st:content="method.name" href="#methodLink" class="keyword">
                                         <st:attr name="href">method.link</st:attr>
                                     </a>
-                                    <span class="punctuation">(</span><span st:loop="param method.params"><span st:content="param.name" class="separated">param</span></span><span class="punctuation">)</span>
+                                    <span class="punctuation">(</span><span><span st:loop="param method.params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span>
                                 </code>
                                 <div class="description" st:content="method.desc">method description</div>
                             </td>
@@ -191,14 +185,14 @@
                         <dt>
                             <span>Methods borrowed from class:</span>
                             <code>
-                                <a href="#owner" st:content="owner.self.alias">
+                                <a href="#owner" st:content="owner.self.name">
                                     <st:attr name="href">owner.self.link</st:attr>
                                 </a>
                             </code>
                         </dt>
                         <code>
                             <dd st:loop="method owner.methods">
-                                <a st:content="method.alias" href="#inheritedMethod" class="keyword">
+                                <a st:content="method.name" href="#inheritedMethod" class="keyword">
                                     <st:attr name="href">method.link</st:attr>
                                 </a>
                             </dd>
@@ -223,25 +217,27 @@
                                 <span st:condition="isPrivate" class="private">private</span>
                                 <span st:condition="isInner" class="inner">inner</span>
                             </span>
-                            <span st:content="alias" class="keyword">Name</span>
-                            <span class="punctuation">(</span><span st:loop="param params"><span st:content="param.name" class="separated">param</span></span><span class="punctuation">)</span>
+                            <span st:content="name" class="keyword">Name</span>
+                            <span class="punctuation">(</span><span><span st:loop="param params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span>
                         </code>
                         <div st:content="desc" class="description">Description</div>
-                        <div st:condition="example.length" st:loop="example example">
-                            <pre st:content="example">
-    function foo(bar) {
-        return 'hello ' + bar;
-    }
-                            </pre>
+                        <div st:condition="example.length">
+                            <div st:loop="code example">
+                                <pre st:content="code">
+function foo(bar) {
+    return 'hello ' + bar;
+}
+                                </pre>
+                            </div>
                         </div>
                         <dl st:condition="params.length" class="detailList">
                             <dt class="heading">Parameters:</dt>
-                            <span st:loop="param in params">
+                            <span st:loop="param params">
                                 <dt>
                                     <code>
-                                        <a st:content="param.type" href="#paramType">
-                                            <st:attr name="href">param.type.link</st:attr>
-                                        </a>
+                                        <span st:condition="param.type">
+                                            <a href="#paramType"><st:attr name="href">param.type.link</st:attr>{<span st:content="param.type"></span>}</a>
+                                        </span>
                                         <span st:content="param.name" class="keyword">param.name</span>
                                         <span st:condition="param.isOptional" class="attributes optional">Optional</span>
                                         <span st:condition="param.defaultValue" class="optional">
@@ -313,26 +309,16 @@
                     <div class="sectionBody">
                         <div st:loop="field ownFields">
                             <code class="title">
-                                <span class="attributes">
-                                    <span st:condition="field.isPrivate">private</span>
-                                    <span st:condition="field.isInner">inner</span>
-                                    <span st:condition="field.isStatic">static</span>
-                                    <span st:condition="field.isConstant">constant</span>
+                                <span st:condition="field.isPrivate" class="attributes">private</span>
+                                <span st:condition="field.isInner" class="attributes">inner</span>
+                                <span st:condition="field.isStatic" class="attributes">static</span>
+                                <span st:condition="field.isConstant" class="attributes">constant</span>
+                                <span st:condition="field.type">
+                                    <a href="#filedType"><st:attr name="href">field.type</st:attr>{<span st:content="field.type"></span>}</a>
                                 </span>
-                                <a st:condition="field.type" st:content="field.type.name" href="#filedType">
-                                    <st:attr name="href">field.type</st:attr>
-                                </a>
-                                <a st:content="field.alias" href="#filedLink" class="keyword">
+                                <a st:content="field.name" href="#filedLink" class="keyword">
                                     <st:attr name="href">field.link</st:attr>
                                 </a>
-                                <span st:condition="field.memberOf" >
-                                    <span class="attributes">Defined in:</span>
-                                    <code>
-                                        <a st:content="field.memberOf" href="#filedOwner">
-                                            <st:attr name="href">field.memberOf.link</st:attr>
-                                        </a>
-                                    </code>
-                                </span>
                             </code>
                             <div class="description">
                                 <span st:content="field.desc">field.desc</span>
@@ -345,8 +331,10 @@
                                 <i>Author:</i>
                                 <span st:content="field.author">field.author</span>
                             </div>
-                            <div st:condition="field.example.length" st:loop="expample field.example">
-                                <pre st:content="example">[i in for each(var i in [1,2,3])]</pre>
+                            <div st:condition="field.example.length">
+                                 <span st:loop="code field.example">
+                                    <pre st:content="code">[i in for each(var i in [1,2,3])]</pre>
+                                </span>
                             </div>
                             <dl st:condition="field.defaultValue" class="detailList">
                                 <dt class="heading">Default Value:</dt>
@@ -382,60 +370,56 @@
                                     <span st:condition="method.isInner" class="private">inner</span>
                                     <span st:condition="method.isStatic" class="private">static</span>
                                 </span>
-                                <a st:condition="method.type" st:content="method.type.name" href="#methodType">
-                                    <st:attr name="href">methodType.type</st:attr>
-                                </a>
-                                <a st:content="method.alias" href="#methodLink" class="keyword">
+                                <span st:condition="method.type">
+                                    <a st:content="method.type.name" href="#methodType">
+                                        <st:attr name="href">methodType.type</st:attr>
+                                    </a>
+                                </span>
+                                <a st:content="method.name" href="#methodLink" class="keyword">
                                     <st:attr name="href">method.link</st:attr>
                                 </a>
-                                <span class="punctuation">(</span><span st:loop="param method.params"><span st:content="param.name" class="separated">param</span></span><span class="punctuation">)</span>
-                                <span st:condition="method.memberOf" >
-                                    <span class="attributes">Defined in:</span>
-                                    <code>
-                                        <a st:content="field.memberOf" href="#filedOwner">
-                                            <st:attr name="href">field.memberOf.link</st:attr>
-                                        </a>
-                                    </code>
-                                </span>
+                                <span class="punctuation">(</span><span><span st:loop="param method.params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span>
                             </code>
                             <div class="description">
-                                <span st:content="method.desc">field.desc</span>
+                                <span st:content="method.desc">method.desc</span>
                             </div>
                             <div st:condition="method.srcFile">
                                 <i>Defined in:</i>
-                                <span st:content="method.srcFile">field.srcFile</span>
+                                <span st:content="method.srcFile">method.srcFile</span>
                             </div>
                             <div st:condition="method.author">
                                 <i>Author:</i>
-                                <span st:content="method.author">field.author</span>
+                                <span st:content="method.author">method.author</span>
                             </div>
-                            <div st:condition="field.example.length" st:loop="expample field.example">
-                                <pre st:content="example">[i in for each(var i in [1,2,3])]</pre>
+                            <div st:condition="method.example.length">
+                                <div st:loop="code method.example">
+                                    <pre st:content="example">[i in for each(var i in [1,2,3])]</pre>
+                                </div>
                             </div>
                             <dl st:condition="method.params.length" class="detailList">
                                 <dt class="heading">Parameters:</dt>
                                 <code st:loop="param method.params">
                                     <dt>
-                                        <a st:content="param.type" href="#paramType">
-                                            <st:attr name="href">param.type.link</st:attr>
-                                        </a>
+                                        <span st:condition="param.type">
+                                            <a href="#paramType"><st:attr name="href">param.type.link</st:attr>{<span st:content="param.type"></span>}</a>
+                                        </span>
                                         <span st:content="param.name" class="keyword">param.name</span>
                                         <span st:condition="param.isOptional" class="attributes optional">Optional</span>
                                         <span st:condition="param.defaultValue" class="default">
                                             <span class="attributes">Default:</span>
                                             <span st:content="param.defaultValue">param.defaultValue</span>
                                         </span>
+                                        <div st:content="param.desc" class="description">param.desc</div>
                                     </dt>
-                                    <dd st:content="param.desc" class="description">param.desc</dd>
                                 </code>
                             </dl>
-                            <dl st:condition="field.deprecated" class="detailList">
+                            <dl st:condition="method.deprecated" class="detailList">
                                 <dt class="heading">Deprecated:</dt>
-                                <dd st:content="field.deprecated">field.deprecated</dd>
+                                <dd st:content="method.deprecated">field.deprecated</dd>
                             </dl>
-                            <dl st:condition="field.since" class="detailList">
+                            <dl st:condition="method.since" class="detailList">
                                 <dt class="heading">Since:</dt>
-                                <dd st:content="field.since">field.since</dd>
+                                <dd st:content="method.since">field.since</dd>
                             </dl>
                             <dl st:condition="method.exceptions.length" class="detailList">
                                 <dt class="heading">Throws:</dt>
@@ -454,7 +438,9 @@
                                         <a st:content="value.type.name" href="#returnClassLink">
                                             <st:attr name="href">value.type.link</st:attr>
                                         </a>
-                                        <div st:condition="value.desc" st:content="value.desc" class="description">value.desc</div>
+                                        <span st:condition="value.desc">
+                                            <div st:content="value.desc" class="description">value.desc</div>
+                                        </span>
                                     </dd>
                                 </code>
                             </dl>
@@ -468,10 +454,10 @@
                                     </dd>
                                 </code>
                             </dl>
-                            <dl st:condition="field.see.length" class="detailList">
+                            <dl st:condition="method.see.length" class="detailList">
                                 <dt class="heading">See:</dt>
-                                <dd st:loop="link field.see">
-                                    <a st:content="link" href="#fieldSeeLink">
+                                <dd st:loop="link method.see">
+                                    <a st:content="link" href="#methodSeeLink">
                                         <st:attr name="href">link</st:attr>
                                     </a>
                                 </dd>
