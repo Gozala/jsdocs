@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:st="http://hyperstruct.net/seethrough#js"
+        xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <meta name="generator" content="JSDocs"/>
+        <title st:content="page.title">JSDoc Reference - Index</title>
+        <style type="text/css" st:content="page.style"> </style>
+        <link rel="stylesheet" type="text/css" href="styles.css"/>
+    </head>
+    <body>
+        <div id="header" class="panel" st:content="page.header">Header Message</div>
+        <div id="index">
+            <div class="center">
+                <a href="#content">Class Index</a>
+                |
+                <a href="#files">File Index</a>
+                <hr/>
+                <h2>Classes</h2>
+                <hr/>
+            </div>
+            <span st:loop="class classes">
+                <div>
+                    <a href="#classLink" st:content="class.name">
+                        <st:attr name="href">'#' + class.name</st:attr>
+                        ClassName
+                    </a>
+                </div>
+            </span>
+            <hr/>
+        </div>
+        <div id="content">
+            <h1 class="classTitle">Class Index</h1>
+            <br/>
+            <div st:loop="class classes">
+                <h2 st:content="class.name">Class Description</h2>
+                <hr/>
+            </div>
+        </div>
+        <div id="footer" class="panel" st:content="page.footer">Footer Message</div>
+    </body>
+</html>
