@@ -6,28 +6,17 @@
         <meta name="generator" content="JSDocs"/>
         <title st:content="page.title">JSDoc Reference - ClassName</title>
         <style type="text/css" st:content="page.style"> </style>
-        <link rel="stylesheet" type="text/css" href="styles.css"/>
+        <style type="text/css" st:content="page.ieFix"> </style>
+        <st:temp st:condition="false"><link rel="stylesheet" type="text/css" href="styles.css"/></st:temp>
     </head>
     <body>
+        <!--[if IE]>
+        <span id="ie">
+        <![endif]-->
         <div id="header" class="panel" st:content="page.header">Header Message</div>
-        <div id="index">
-            <div class="center">
-                <a href="#content">Class Index</a>
-                |
-                <a href="#files">File Index</a>
-                <hr/>
-                <h2>Classes</h2>
-                <hr/>
-            </div>
-            <span st:loop="element classes">
-                <div>
-                    <a href="#classLink" st:content="element.name">
-                        <st:attr name="href">element.link</st:attr>
-                    </a>
-                </div>
-            </span>
-            <hr/>
-        </div>
+        <!-- Block With CSS Magic -->
+        <div id="index" st:replace="list">list</div>
+        <!-- /Block With CSS Magic -->
         <div id="content">
             <h1 class="classTitle">
                 <span st:condition="isBuiltin" class="builtin">Built-In</span>
@@ -48,7 +37,7 @@
                     </code>
                 </div>
                 <div class="description" st:content="classDesc">Class Description</div>
-                <div st:condition="!(isBuiltin)">
+                <div st:condition="!isBuiltin">
                     <i>Defined in: </i>
                     <a st:content="srcFile" href="#sourceLink">
                         <st:attr name="href">srcLink</st:attr>
@@ -173,7 +162,7 @@
                                     <a st:content="method.name" href="#methodLink" class="keyword">
                                         <st:attr name="href">method.link</st:attr>
                                     </a>
-                                    <span class="punctuation">(</span><span><span st:loop="param method.params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span>
+                                    <span class="punctuation">(</span><span class="params"><span st:loop="param method.params" class="separated"><span st:replace="param.name">param</span></span></span><span class="punctuation">)</span>
                                 </code>
                                 <div class="description" st:content="method.desc">method description</div>
                             </td>
@@ -218,12 +207,12 @@
                                 <span st:condition="isInner" class="inner">inner</span>
                             </span>
                             <span st:content="name" class="keyword">Name</span>
-                            <span class="punctuation">(</span><span><span st:loop="param params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span>
+                            <span class="punctuation">(</span><span class="params"><span st:loop="param params" class="separated"><span st:replace="param.name">param</span></span></span><span class="punctuation">)</span>
                         </code>
                         <div st:content="desc" class="description">Description</div>
                         <div st:condition="example.length">
                             <div st:loop="code example">
-                                <pre st:content="code">
+                                <pre st:exec="highlight(code.toString())" class="example">
 function foo(bar) {
     return 'hello ' + bar;
 }
@@ -333,7 +322,7 @@ function foo(bar) {
                             </div>
                             <div st:condition="field.example.length">
                                  <span st:loop="code field.example">
-                                    <pre st:content="code">[i in for each(var i in [1,2,3])]</pre>
+                                    <pre st:exec="highlight(code.toString())" class="example">[i in for each(var i in [1,2,3])]</pre>
                                 </span>
                             </div>
                             <dl st:condition="field.defaultValue" class="detailList">
@@ -393,7 +382,7 @@ function foo(bar) {
                             </div>
                             <div st:condition="method.example.length">
                                 <div st:loop="code method.example">
-                                    <pre st:content="example">[i in for each(var i in [1,2,3])]</pre>
+                                    <pre st:exec="highlight(code.toString())">[i in for each(var i in [1,2,3])]</pre>
                                 </div>
                             </div>
                             <dl st:condition="method.params.length" class="detailList">
@@ -469,5 +458,8 @@ function foo(bar) {
             </div>
         </div>
         <div id="footer" class="panel" st:content="page.footer">Footer Message</div>
+        <!--[if IE]>
+        </span>
+        <![endif]-->
     </body>
 </html>

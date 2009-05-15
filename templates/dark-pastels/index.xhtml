@@ -6,29 +6,17 @@
         <meta name="generator" content="JSDocs"/>
         <title st:content="page.title">JSDoc Reference - Index</title>
         <style type="text/css" st:content="page.style"> </style>
-        <link rel="stylesheet" type="text/css" href="styles.css"/>
+        <style type="text/css" st:content="page.ieFix"> </style>
+        <st:temp st:condition="false"><link rel="stylesheet" type="text/css" href="styles.css"/></st:temp>
     </head>
-    <body>
+    <body id="menu">
+        <!--[if IE]>
+        <span id="ie">
+        <![endif]-->
         <div id="header" class="panel" st:content="page.header">Header Message</div>
-        <div id="index">
-            <div class="center">
-                <a href="#content">Class Index</a>
-                |
-                <a href="#files">File Index</a>
-                <hr/>
-                <h2>Classes</h2>
-                <hr/>
-            </div>
-            <span st:loop="class classes">
-                <div>
-                    <a href="#classLink" st:content="class.name">
-                        <st:attr name="href">'#' + class.name</st:attr>
-                        ClassName
-                    </a>
-                </div>
-            </span>
-            <hr/>
-        </div>
+        <!-- Block With CSS Magic -->
+        <div id="index" st:replace="list">list</div>
+        <!-- /Block With CSS Magic -->
         <div id="content">
             <h1 class="classTitle">Class Index</h1>
             <br/>
@@ -38,5 +26,8 @@
             </div>
         </div>
         <div id="footer" class="panel" st:content="page.footer">Footer Message</div>
+        <!--[if IE]>
+        </span>
+        <![endif]-->
     </body>
 </html>

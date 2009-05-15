@@ -5,6 +5,9 @@
     "js": "lib",
     "license": ["MPL 1.1","GPL 2.0", "LGPL 2.1"],
     "platform": ["rhino"],
+    "dependencies": [
+        ["syntaxStroop"]
+    ],
     "version": {
         "label": "0.1",
         "numeric": [0,1],
