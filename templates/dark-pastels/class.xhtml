@@ -37,7 +37,7 @@
                     </code>
                 </div>
                 <div class="description" st:content="classDesc">Class Description</div>
-                <div st:condition="!isBuiltin">
+                <div st:condition="isBuiltin">
                     <i>Defined in: </i>
                     <a st:content="srcFile" href="#sourceLink">
                         <st:attr name="href">srcLink</st:attr>
@@ -57,7 +57,7 @@
                         <span st:condition="isFunction" class="function">Function</span>
                         <span class="namespace">Namespace</span>
                     </span>
-                    <span class="class">Class</span>
+                    <span st:condition="isFunction" class="class">Class</span>
                     <span>Summary</span>
                 </caption>
                 <thead>
@@ -81,7 +81,7 @@
                                     <a st:content="constructorLink" href="#constructorLink" class="keyword">
                                         <st:attr name="href">constructorLink</st:attr>
                                     </a>
-                                    <span class="punctuation">(</span><span><span st:loop="param params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span>
+                                    <span st:condition="params"><span class="punctuation">(</span><span><span st:loop="param params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span></span>
                                 </code>
                                 <div st:content="desc" class="description">Contructor decription</div>
                             </div>
@@ -197,7 +197,7 @@
                                 <span st:condition="isFunction" class="function">Function</span>
                                 <span class="namespace">Namespace</span>
                             </span>
-                        <span class="class">Class</span>
+                        <span st:condition="isFunction" class="class">Class</span>
                         <span>Detail</span>
                     </div>
                     <div class="sectionBody">
@@ -207,7 +207,7 @@
                                 <span st:condition="isInner" class="inner">inner</span>
                             </span>
                             <span st:content="name" class="keyword">Name</span>
-                            <span class="punctuation">(</span><span class="params"><span st:loop="param params" class="separated"><span st:replace="param.name">param</span></span></span><span class="punctuation">)</span>
+                            <span st:condition="params"><span class="punctuation">(</span><span class="params"><span st:loop="param params" class="separated"><span st:replace="param.name">param</span></span></span><span class="punctuation">)</span></span>
                         </code>
                         <div st:content="desc" class="description">Description</div>
                         <div st:condition="example.length">
@@ -339,9 +339,10 @@ function foo(bar) {
                             </dl>
                             <dl st:condition="field.see.length" class="detailList">
                                 <dt class="heading">See:</dt>
-                                <dd st:loop="link field.see">
-                                    <a st:content="link" href="#fieldSeeLink">
-                                        <st:attr name="href">link</st:attr>
+                                <dd st:loop="seeFieldLink field.see">
+                                    <a href="#fieldSeeLink">
+                                        <st:attr name="href">#<span st:replace="seeFieldLink"></span></st:attr>
+                                        <span st:replace="seeFieldLink"></span>
                                     </a>
                                 </dd>
                             </dl>
@@ -445,9 +446,10 @@ function foo(bar) {
                             </dl>
                             <dl st:condition="method.see.length" class="detailList">
                                 <dt class="heading">See:</dt>
-                                <dd st:loop="link method.see">
-                                    <a st:content="link" href="#methodSeeLink">
-                                        <st:attr name="href">link</st:attr>
+                                <dd st:loop="seeMethodlink method.see">
+                                    <a href="#methodSeeLink">
+                                        <st:attr name="href">#<span st:replace="seeMethodlink"></span></st:attr>
+                                        <span st:replace="seeMethodlink"></span>
                                     </a>
                                 </dd>
                             </dl>
