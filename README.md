@@ -8,6 +8,12 @@ Current state
 
 Currently the project is under development and it is not heavily tested, but seems to be working. The code ported from jsdocs-toolkit is very messy and it was not designed for modular systems conforming [Securable Modules specification](https://wiki.mozilla.org/ServerJS/Modules/SecurableModules), therefore a major refactoring still has to be done. The template system is likely to be changed as it is really tied to the model now. Everyone is more than welcome to help with it!
 
+Demo pages
+-----------------
+[documentation](http://gozala.github.com/bespinserv/docs/bespinserv+lib+bespinserv+model.js@User.html)
+[source](http://gozala.github.com/bespinserv/docs/bespinserv+lib+bespinserv+model.js.html#line-186)
+
+
 Getting Started
 ---------------
 
