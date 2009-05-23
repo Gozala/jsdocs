@@ -24,7 +24,7 @@
                     <span st:condition="isFunction" class="function">Function</span>
                     <span class="namespace">Namespace</span>
                 </span>
-                <span class="class">Class</span>
+                <span st:condition="isConstructor" class="class">Class</span>
                 <span st:content="alias">ClassName</span>
             </h1>
             <p id="summary">
@@ -78,10 +78,10 @@
                             <div>
                                 <st:attr name="class">highlighted</st:attr>
                                 <code>
-                                    <a st:content="constructorLink" href="#constructorLink" class="keyword">
-                                        <st:attr name="href">constructorLink</st:attr>
+                                    <a st:content="constructorLink" href="#constructor" class="keyword">
+                                        Construnctor
                                     </a>
-                                    <span st:condition="params"><span class="punctuation">(</span><span><span st:loop="param params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span></span>
+                                    <span st:condition="isConstructor"><span class="punctuation">(</span><span><span st:loop="param params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span></span>
                                 </code>
                                 <div st:content="desc" class="description">Contructor decription</div>
                             </div>
@@ -110,8 +110,9 @@
                             </td>
                             <td class="nameDescription">
                                 <code class="code">
-                                    <a st:content="field.name" href="#fieldLink" class="keyword">
-                                        <st:attr name="href">field.link</st:attr>
+                                    <a href="#fieldLink" class="keyword">
+                                        <st:attr name="href">#<span st:replace="field.name"></span></st:attr>
+                                        <span st:replace="field.name"></span>
                                     </a>
                                 </code>
                                 <div class="description" st:content="field.desc">field description</div>
@@ -159,8 +160,9 @@
                             </td>
                             <td class="nameDescription">
                                 <code class="ignore-line-brakes">
-                                    <a st:content="method.name" href="#methodLink" class="keyword">
-                                        <st:attr name="href">method.link</st:attr>
+                                    <a href="#methodLink" class="keyword">
+                                        <st:attr name="href">#<span st:replace="method.name"></span></st:attr>
+                                        <span st:replace="method.name"></span>
                                     </a>
                                     <span class="punctuation">(</span><span class="params"><span st:loop="param method.params" class="separated"><span st:replace="param.name">param</span></span></span><span class="punctuation">)</span>
                                 </code>
@@ -197,17 +199,17 @@
                                 <span st:condition="isFunction" class="function">Function</span>
                                 <span class="namespace">Namespace</span>
                             </span>
-                        <span st:condition="isFunction" class="class">Class</span>
+                        <span st:condition="isConstructor" class="class">Class</span>
                         <span>Detail</span>
                     </div>
                     <div class="sectionBody">
-                        <code>
+                        <code id="constructor">
                             <span class="attributes">
                                 <span st:condition="isPrivate" class="private">private</span>
                                 <span st:condition="isInner" class="inner">inner</span>
                             </span>
                             <span st:content="name" class="keyword">Name</span>
-                            <span st:condition="params"><span class="punctuation">(</span><span class="params"><span st:loop="param params" class="separated"><span st:replace="param.name">param</span></span></span><span class="punctuation">)</span></span>
+                            <span st:condition="isConstructor"><span class="punctuation">(</span><span class="params"><span st:loop="param params" class="separated"><span st:replace="param.name">param</span></span></span><span class="punctuation">)</span></span>
                         </code>
                         <div st:content="desc" class="description">Description</div>
                         <div st:condition="example.length">
@@ -297,6 +299,7 @@ function foo(bar) {
                     <div class="sectionTitle">Field Detail</div>
                     <div class="sectionBody">
                         <div st:loop="field ownFields">
+                            <st:attr name="id"><span st:replace="field.name"></span></st:attr>
                             <code class="title">
                                 <span st:condition="field.isPrivate" class="attributes">private</span>
                                 <span st:condition="field.isInner" class="attributes">inner</span>
@@ -306,7 +309,7 @@ function foo(bar) {
                                     <a href="#filedType"><st:attr name="href">field.type</st:attr>{<span st:content="field.type"></span>}</a>
                                 </span>
                                 <a st:content="field.name" href="#filedLink" class="keyword">
-                                    <st:attr name="href">field.link</st:attr>
+                                    <st:attr name="href"><span st:replace="field.link"></span></st:attr>
                                 </a>
                             </code>
                             <div class="description">
@@ -354,6 +357,7 @@ function foo(bar) {
                     <div class="sectionTitle">Method Detail</div>
                     <div class="sectionBody">
                         <div st:loop="method ownMethods">
+                            <st:attr name="id"><span st:replace="method.name"></span></st:attr>
                             <code class="title">
                                 <span class="attributes">
                                     <span st:condition="method.isPrivate" class="private">private</span>
@@ -362,11 +366,11 @@ function foo(bar) {
                                 </span>
                                 <span st:condition="method.type">
                                     <a st:content="method.type.name" href="#methodType">
-                                        <st:attr name="href">methodType.type</st:attr>
+                                        <st:attr name="href"><span st:replace="methodType.type"></span></st:attr>
                                     </a>
                                 </span>
                                 <a st:content="method.name" href="#methodLink" class="keyword">
-                                    <st:attr name="href">method.link</st:attr>
+                                    <st:attr name="href"><span st:replace="method.link"></span></st:attr>
                                 </a>
                                 <span class="punctuation">(</span><span><span st:loop="param method.params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span>
                             </code>

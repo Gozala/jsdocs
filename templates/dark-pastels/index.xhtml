@@ -18,10 +18,15 @@
         <div id="index" st:replace="list">list</div>
         <!-- /Block With CSS Magic -->
         <div id="content">
-            <h1 class="classTitle">Class Index</h1>
+            <h1 class="classTitle">Documentation Index</h1>
             <br/>
-            <div st:loop="class classes">
-                <h2 st:content="class.name">Class Description</h2>
+            <div st:loop="element classes">
+                <h2>
+                    <a href="#classLink">
+                        <st:attr name="href"><span st:replace="element.link"></span></st:attr>
+                        <span st:replace="element.name"></span>
+                    </a>
+                </h2>
                 <hr/>
             </div>
         </div>

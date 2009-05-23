@@ -60,7 +60,12 @@ exports.publish = function publish(symbolSet, files) {
             header: header,
             footer: footer
         },
-        classes: classes,
+        classes: classes.map(function(element) {
+            return {
+                name: element.name,
+                link: (escapePath(element.srcFile || '') + '@' + element.name + '.html')
+            };
+        }),
         list: list
     });
     
