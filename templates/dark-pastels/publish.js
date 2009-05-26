@@ -5,7 +5,7 @@
  * represent class, object, memeber of the class, comment)</i>
  * @param {JSDOC}
  */
-exports.publish = function publish(symbolSet, files) {
+exports.publish = function publish(symbolSet, files, Plugins) {
     Log.debug('Setting static varibales');
     /**
      * Map of files paths and data that will be written.
@@ -28,12 +28,16 @@ exports.publish = function publish(symbolSet, files) {
     }).sort(makeSortby('alias'));
     
     Log.debug('Creating templates');
-    var css = new Plugins.Template('styles.css').render();
-    var ieFix = new Plugins.Template('ieFix.css').render();
+    var css = new Plugins.getContent('styles.css');
+    var ieFix = new Plugins.getContent('ieFix.css');
     var listTemplate = new Plugins.Template('list.xhtml', 'index');
+    Log.debug('List template is created');
     var indexTemplate = new Plugins.Template('index.xhtml');
+    Log.debug('Index template is created');
     var classTemplate = new Plugins.Template('class.xhtml');
+    Log.debug('Class template is created');
     var codeTemplate = new Plugins.Template('code.xhtml');
+    Log.debug('Code template is created');
     
     Log.debug('Rendering list widget template');
     list = listTemplate.render({
