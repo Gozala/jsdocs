@@ -2,11 +2,13 @@
  * @Module
  * Abstaract Syntax Tree
  */
+var Node = require('./node').Node;
 
 /**
  * shortcuts
  */
 var JAstNode = org.mozilla.javascript.ast.AstNode;
+var JNode = org.mozilla.javascript.ast.Node;
 
 /**
  * Node for the root of a parse tree.  It contains the statements and functions
@@ -86,78 +88,80 @@ exports.AstRoot = AstRoot;
  * when producing this representation.
  * @class
  * @param {org.mozilla.javascript.ast.AstNode}
+ * @extends Node
  */
 function AstNode(jAstNode) {
     if (!jAstNode) return null;
-    this._astNode = jAstNode;
+    this._jBase = jAstNode;
 }
 AstNode.prototype = {
     /**
      * @type org.mozilla.javascript.ast.AstNode
      */
-    _astNode: null,
+    _jBase: null,
     /**
      * Returns a debugging representation of the parse tree
      * starting at this node.
      * @returns {String}        a very verbose indented printout of the tree.
      * The format of each line is:  abs-pos  name position length [identifier]
      */
-    debugPrint: function() { return new String(this._astNode.debugPrint()); },
+    debugPrint: function() { return new String(this._jBase.debugPrint()); },
     /**
      * Line number recorded for this node. If no line number was recorded,
      * searches the parent chain. the nearest line number, or -1 if none was
      * found
      * @type Integer
      */
-    get line() { return parseInt(new String(this._astNode.getLineno())) },
+    get line() { return parseInt(new String(this._jBase.getLineno())) },
     /**
      * Depth of this node. The root is depth 0, its children are depth 1, and
      * so on.
      * @type Integer
      */
-    get depth() { return parseInt(new String(this._astNode.depth())) },
+    get depth() { return parseInt(new String(this._jBase.depth())) },
     /**
      * Short, descriptive name for the node, such as "ArrayComprehension".
      * @type String
      */
-    get shortName() { return new String(this._astNode.shortName()); },
+    get shortName() { return new String(this._jBase.shortName()); },
     /**
      * Prints the source indented to depth 0.
      */
-    toSource: function() { return new String(this._astNode.toSource()); },
+    toSource: function() { return new String(this._jBase.toSource()); },
     /**
      * Returns the root of the tree containing this node.
      * @return the {@link AstRoot} at the root of this node's parent
      * chain, or {@code null} if the topmost parent is not an {@code AstRoot}.
      * @type AstRoot
      */
-    get astRoot() { return new AstRoot(this._astNode.getAstRoot()) },
+    get astRoot() { return new AstRoot(this._jBase.getAstRoot()) },
     /**
      * Parent node, or {@code null} if it has none.
      */
-    get parent() { return new AstNode(this._astNode.getParent()); },
+    get parent() { return new AstNode(this._jBase.getParent()); },
     /**
      * Node length
      * @type Integer
      */
-    get length() { return parseInt(new String(this._astNode.getLength())) },
+    get length() { return parseInt(new String(this._jBase.getLength())) },
     /**
      * Absolute document position of the node. Computes it by adding the node's
      * relative position to the relative positions of all its parents.
      * @type Integer
      */
     get absolutePosition() {
-        return parseInt(new String(this._astNode.getAbsolutePosition()))
+        return parseInt(new String(this._jBase.getAbsolutePosition()))
     },
     /**
      * Relative position in parent
      * @type Integer
      */
-    get position() { return parseInt(new String(this._astNode.getPosition())) },
+    get position() { return parseInt(new String(this._jBase.getPosition())) },
     toString: function() {
-        
+        return this.shortName + ' : ' + this._jBase.toString();
     }
 };
+AstNode.prototype.__proto__ = Node.prototype;
 /**
  * Returns the string name for this operator.
  * @param {Integer}         op the token type, e.g. {@link Token#ADD} or

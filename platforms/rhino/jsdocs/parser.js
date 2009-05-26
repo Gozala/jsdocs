@@ -93,13 +93,13 @@ function Parser() {
                 lineSource +  ': line ' + line + '  at ' + lineOffset);
         }
     });
-    this._parser = new JParser(new JCompilerEnvirons(), errorReporter);
+    this._jBase = new JParser(new JCompilerEnvirons(), errorReporter);
 };
 Parser.prototype = {
     /**
      * @type org.mozilla.javascript.Parser
      */
-    _parser: null,
+    _jBase: null,
     /**
      *
      */
@@ -123,7 +123,7 @@ Parser.prototype = {
         uri = uri || 'anonymus';
         lineno = lineno || 0;
         try {
-            return new AstRoot(this._parser.parse(source, uri, lineno));
+            return new AstRoot(this._jBase.parse(source, uri, lineno));
         } catch(e) {
             throw new Error(new String(e.message));
         }
