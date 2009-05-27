@@ -28,8 +28,8 @@ exports.publish = function publish(symbolSet, files, Plugins) {
     }).sort(makeSortby('alias'));
     
     Log.debug('Creating templates');
-    var css = new Plugins.getContent('styles.css');
-    var ieFix = new Plugins.getContent('ieFix.css');
+    var css = Plugins.getContent('styles.css');
+    var ieFix = Plugins.getContent('ieFix.css');
     var listTemplate = new Plugins.Template('list.xhtml', 'index');
     Log.debug('List template is created');
     var indexTemplate = new Plugins.Template('index.xhtml');
