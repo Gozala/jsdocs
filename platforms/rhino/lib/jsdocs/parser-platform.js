@@ -8,7 +8,7 @@
  * @imports
  */
 var File = require('file').Path
-    AstRoot = require('jsdocs/ast').AstRoot;
+    AstRoot = require('./ast-platform').AstRoot;
 
 /**
  * shortcuts

@@ -12,3 +12,4 @@ Node.prototype = {
 Node.newString = function nodeNewString(string) {
     
 }
+exports.Node = Node;
