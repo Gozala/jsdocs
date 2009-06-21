@@ -7,8 +7,8 @@
 /**
  * imports
  */
-var File = require('file').Path
-    AstRoot = require('./ast-platform').AstRoot;
+var File = require("file").Path
+    AstRoot = require("./ast-platform").AstRoot;
 
 /**
  * shortcuts
@@ -18,7 +18,7 @@ var JParser = org.mozilla.javascript.Parser,
     JErrorReporter = org.mozilla.javascript.ErrorReporter,
     JEvaluatorException = org.mozilla.javascript.EvaluatorException;
 
-/*
+/**
  * Builds an abstarct syntaxt tree from the given source.
  * It is based on the Java Class org.mozilla.javascript.Parser form rhino.
  * If the parse fails, null will be returned.
@@ -46,8 +46,8 @@ var JParser = org.mozilla.javascript.Parser,
  * }
  */
 function parse(source, uri, lineno, warnings, errors) {
-    if (source.read) source = source.read().toString();
-    uri = uri || 'anonymus';
+    source = (source.read ? source.read() : source).toString();
+    uri = (uri || (source.read ? source : 'anonymus')).toString();
     lineno = lineno || 0;
 
     warnings = warnings|| [];
