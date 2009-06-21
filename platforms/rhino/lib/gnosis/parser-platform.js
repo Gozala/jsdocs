@@ -1,11 +1,11 @@
 /**
  * @module
- * @requires ast
+ * @requires file, ast-platform
  * @author Irakli Gozalishvili <rfobic@gmail.com>
  */
 
 /**
- * @imports
+ * imports
  */
 var File = require('file').Path
     AstRoot = require('./ast-platform').AstRoot;
@@ -13,27 +13,54 @@ var File = require('file').Path
 /**
  * shortcuts
  */
-var JParser = org.mozilla.javascript.Parser;
-var JCompilerEnvirons = org.mozilla.javascript.CompilerEnvirons;
-var JErrorReporter = org.mozilla.javascript.ErrorReporter;
-var JEvaluatorException = org.mozilla.javascript.EvaluatorException;
+var JParser = org.mozilla.javascript.Parser,
+    JCompilerEnvirons = org.mozilla.javascript.CompilerEnvirons,
+    JErrorReporter = org.mozilla.javascript.ErrorReporter,
+    JEvaluatorException = org.mozilla.javascript.EvaluatorException;
 
-/**
- * This class implements the JavaScript parser.
- *
+/*
+ * Builds an abstarct syntaxt tree from the given source.
  * It is based on the Java Class org.mozilla.javascript.Parser form rhino.
- * 
- * @class This class implements jsavascript parser.
- * @see TokenStream
+ * If the parse fails, null will be returned.
+ * (The parse failure will be available in optional errors param.)
  * @author Irakli Gozalishvili <rfobic@gmail.com>
+ * @param {String|File} source          Source or File to be parsed
+ * @param {String} [uri='anonymus']     URI of the source file
+ * @param {Number} [lino=0]             Number of lines to parse.
+ * @returns {
+ *      @type {AstRoot} ast             abstarcat syntaxt tree of the source.
+ *      @type {[{
+ *          @type {String} message      message string
+ *          @type {String} sourceName   source
+ *          @type {Number} line         line number
+ *          @type {String} lineSource
+ *          @type {String} lineOffset
+ *      }]} warnings                    parse warnings
+ *      @type {[{
+ *          @type {String} message      message string
+ *          @type {String} sourceName   source
+ *          @type {Number} line         line number
+ *          @type {String} lineSource
+ *          @type {String} lineOffset
+ *      }]} errors                      parse warnings
+ * }
  */
-function Parser() {
-    var errors = this.errors = [];
-    var warnings = this.warnings = [];
+function parse(source, uri, lineno, warnings, errors) {
+    if (source.read) source = source.read().toString();
+    uri = uri || 'anonymus';
+    lineno = lineno || 0;
+
+    warnings = warnings|| [];
+    errors = errors || [];
+
+    var compilerEnv = new JCompilerEnvirons();
+    compilerEnv.setRecordingComments(true);
+    compilerEnv.setRecordingLocalJsDocComments(true);
+
     /**
      * Implementing java interface {@code org.mozilla.javascript.ErrorReporter}
      */
-    var errorReporter = new JErrorReporter({
+    errorReporter = new JErrorReporter({
         /**
          * Reports a warning.
          * @param {java.lang.String} message        warning description
@@ -93,43 +120,17 @@ function Parser() {
                 lineSource +  ': line ' + line + '  at ' + lineOffset);
         }
     });
-    var compilerEnvirons = new JCompilerEnvirons();
-    compilerEnvirons.setRecordingComments(true);
-    compilerEnvirons.setRecordingLocalJsDocComments(true);
-    this._jBase = new JParser(compilerEnvirons, errorReporter);
-};
-Parser.prototype = {
-    /**
-     * @type org.mozilla.javascript.Parser
-     */
-    _jBase: null,
-    /**
-     *
-     */
-    errors: null,
-    /**
-     *
-     */
-    warnings: null,
-    /*
-     * Build a parse tree from the given source.
-     *
-     * @param {String|File} source          Source or File to be parsed
-     * @param {String} [uri='anonymus']     URI of the source file
-     * @param {Number} [lino=0]             Number of lines to parse.
-     * @return an Object representing the parsed source. If the parse fails,
-     * null will be returned.  (The parse failure will result in a call to
-     * the ErrorReporter from CompilerEnvirons.)
-     */
-    parse: function(source, uri, lineno) {
-        if (source.read) source = source.read().toString();
-        uri = uri || 'anonymus';
-        lineno = lineno || 0;
-        try {
-            return new AstRoot(this._jBase.parse(source, uri, lineno));
-        } catch(e) {
-            throw new Error(new String(e.message));
-        }
+
+    try {
+        var ast = new JParser(compilerEnv, errorReporter).parse(source, uri, lineno);
+        return {
+            ast: new AstRoot(ast),
+            warnings: warnings,
+            errors: errors
+        };
+    } catch(e) {
+        throw new Error(new String(e.message));
     }
-};
-exports.Parser = Parser;
+}
+
+exports.parse = parse;
