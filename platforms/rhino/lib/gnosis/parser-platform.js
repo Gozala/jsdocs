@@ -93,7 +93,10 @@ function Parser() {
                 lineSource +  ': line ' + line + '  at ' + lineOffset);
         }
     });
-    this._jBase = new JParser(new JCompilerEnvirons(), errorReporter);
+    var compilerEnvirons = new JCompilerEnvirons();
+    compilerEnvirons.setRecordingComments(true);
+    compilerEnvirons.setRecordingLocalJsDocComments(true);
+    this._jBase = new JParser(compilerEnvirons, errorReporter);
 };
 Parser.prototype = {
     /**
