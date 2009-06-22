@@ -20,12 +20,11 @@ var JNode = org.mozilla.javascript.ast.Node;
  * as IDEs or pretty-printers.  The parser must not rewrite the parse tree
  * when producing this representation.
  * @class
- * @param {org.mozilla.javascript.ast.AstNode}
+ * @param {org.mozilla.javascript.ast.AstNode|Node}
  * @extends Node
  */
-function AstNode(jAstNode) {
-    if (!jAstNode) return null;
-    this._base = jAstNode;
+function AstNode(base) {
+    this._base = base._base || base;
 }
 AstNode.prototype = {
     /**
@@ -95,15 +94,6 @@ AstNode.prototype = {
     }
 };
 AstNode.prototype.__proto__ = Node.prototype;
-/**
- * Returns the string name for this operator.
- * @param {Integer}         op the token type, e.g. {@link Token#ADD} or
- * {@link Token#TYPEOF}
- * @returns {String}        the source operator string, such as "+" or "typeof"
- */
-AstNode.operatorToString = function operatorToString(operator) {
-    return new String(JAstNode.operatorToString(operator))
-};
 exports.AstNode = AstNode;
 
 /**
@@ -115,11 +105,11 @@ exports.AstNode = AstNode;
  * and warnings, can be found in {@link Parser#errors} {@link Parser#warnings}.
  * @class
  * @author Irakli Gozalishvili
- * @param {org.mozilla.javascript.ast.AstRoot} jAst
+ * @param {org.mozilla.javascript.ast.AstRoot} base
+ * @extends {AstNode}
  */
-function AstRoot(jAst) {
-    if (!jAst) return null;
-    this._base = jAst;
+function AstRoot(base) {
+    this._base = base;
 }
 AstRoot.prototype = {
     /**
@@ -172,8 +162,14 @@ AstRoot.prototype = {
      * @type {Comment[]}                  comment set, sorted by start position.
      */
     get comments() {
-        var comments = this._base.getComments();
-        return comments ? comments.toArray().map(function(e) { return e }) : [];
+        var comments = [];
+        try {
+            comments = this._base.getComments().toArray().map(function(node) {
+                return new AstNode(node);
+            });
+        } finally {
+            return comments;
+        }
     },
     /**
      * Returns a copy of the child list, with each child cast to an
@@ -194,3 +190,112 @@ AstRoot.prototype = {
 };
 AstRoot.prototype.__proto__ = AstNode.prototype;
 exports.AstRoot = AstRoot;
+
+/**
+ * A list of one or more var, const or let declarations.
+ * Node type is {@link Token#VAR}, {@link Token#CONST} or
+ * {@link Token#LET}.<p>
+ *
+ * If the node is for {@code var} or {@code const}, the node position
+ * is the beginning of the {@code var} or {@code const} keyword.
+ * For {@code let} declarations, the node position coincides with the
+ * first {@link VariableInitializer} child.<p>
+ *
+ * A standalone variable declaration in a statement context is wrapped with an
+ * {@link ExpressionStatement}.
+ *
+ * @param {org.mozilla.javascript.ast.AstNode|Node}
+ * @extends {AstNode}
+ */
+function VariableDeclaration(base) {
+    this._base = base._base || base;
+}
+VariableDeclaration.prototype = {
+    /**
+     * Variable list.
+     */
+    get variables() {
+        return this._base.getVariables().toArray().map(function(variable) {
+            return new Node(variable);
+        });
+    },
+    /**
+     * @type {Boolean}          true if this is a {@link Token#VAR} declaration.
+     */
+    get isVar() { return this.type == Token.VAR },
+    /**
+     * @type {Boolean}          true if this is a {@link Token#LET} declaration.
+     */
+    get isLet() { return this.type == Token.LET },
+    /**
+     * @type {Boolean}          true if this is a {@link Token#CONST}
+     * declaration.
+     */
+    get isConst() { return this.type == Token.CONST },
+}
+VariableDeclaration.prototype.__proto__ = AstNode.prototype;
+exports.VariableDeclaration = VariableDeclaration;
+
+/**
+ * A variable declaration or initializer, part of a {@link VariableDeclaration}
+ * expression.  The variable "target" can be a simple name or a destructuring
+ * form.  The initializer, if present, can be any expression.<p>
+ *
+ * Node type is one of {@link Token#VAR}, {@link Token#CONST}, or
+ * {@link Token#LET}.<p>
+ *
+ * @param {org.mozilla.javascript.ast.AstNode|Node}
+ * @extends {AstNode}
+ */
+function VariableInitializer(base) {
+    this._base = base._base || base;
+};
+VariableInitializer.prototype = {
+    /**
+     * @type {AstNode}               variable name or destructuring form
+     */
+    get target() {
+        return new AstNode(this._base.getTarget());
+    },
+    /**
+     * @type {AstNode}               initial value, or {@code null} if not
+     * provided
+     */
+    get initializer() {
+        return new AstNode(this._base.getInitializer());
+    },
+    /**
+     * Returns true if this is a destructuring assignment.  If so, the
+     * initializer must be non-{@code null}.
+     * @return {@code true} if the {@code target} field is a destructuring form
+     * (an {@link ArrayLiteral} or {@link ObjectLiteral} node)
+     */
+    get isDestructuring() { return this._base.isDestructuring(); },
+}
+VariableInitializer.prototype.__proto__ = AstNode.prototype;
+
+/**
+ * AST node for a simple name.  A simple name is an identifier that is
+ * not a keyword. Node type is {@link Token#NAME}.<p>
+ *
+ * This node type is also used to represent certain non-identifier names that
+ * are part of the language syntax.  It's used for the "get" and "set"
+ * pseudo-keywords for object-initializer getter/setter properties, and it's
+ * also used for the "*" wildcard in E4X XML namespace and name expressions.
+ *
+ * @param {org.mozilla.javascript.ast.AstNode|Node}
+ * @extends {AstNode}
+ */
+function Name(base) {
+    this._base = base._base || base;
+}
+Name.prototype = {
+    /**
+     * @type {String}               Node's identifier
+     */
+    get identifier() {
+        return new String(this._base.getIdentifier()).toString();
+    },
+}
+Name.prototype.__proto__ = AstNode.prototype;
+exports.Name = Name;
