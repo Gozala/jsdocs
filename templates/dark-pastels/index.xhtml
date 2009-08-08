@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:st="http://hyperstruct.net/seethrough#js"
+        xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <meta name="generator" content="JSDocs"/>
+        <title st:content="page.title">JSDoc Reference - Index</title>
+        <style type="text/css" st:content="page.style"> </style>
+        <style type="text/css" st:content="page.ieFix"> </style>
+        <st:temp st:condition="false"><link rel="stylesheet" type="text/css" href="styles.css"/></st:temp>
+    </head>
+    <body id="menu">
+        <!--[if IE]>
+        <span id="ie">
+        <![endif]-->
+        <div id="header" class="panel" st:content="page.header">Header Message</div>
+        <!-- Block With CSS Magic -->
+        <span st:xmlstring="list">list</span>
+        <!-- /Block With CSS Magic -->
+        <div id="content">
+            <h1 class="classTitle">Documentation Index</h1>
+            <br/>
+            <div st:loop="element classes">
+                <h2>
+                    <a href="#classLink">
+                        <st:attr name="href"><span st:replace="element.link"></span></st:attr>
+                        <span st:replace="element.name"></span>
+                    </a>
+                </h2>
+                <hr/>
+            </div>
+        </div>
+        <div id="footer" class="panel" st:content="page.footer">Footer Message</div>
+        <!--[if IE]>
+        </span>
+        <![endif]-->
+    </body>
+</html>

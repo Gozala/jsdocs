@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:st="http://hyperstruct.net/seethrough#js"
+        xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <meta name="generator" content="JSDocs"/>
+        <title st:content="page.title">JSDoc Reference - Source</title>
+        <style type="text/css" st:content="page.style"> </style>
+        <style type="text/css" st:content="page.ieFix"> </style>
+        <st:temp st:condition="false"><link rel="stylesheet" type="text/css" href="styles.css"/></st:temp>
+    </head>
+    <body id="source">
+        <!--[if IE]>
+        <span id="ie">
+        <![endif]-->
+        <!-- Block With CSS Magic -->
+        <span st:xmlstring="list">list</span>
+        <!-- /Block With CSS Magic -->
+        <div id="header" class="panel" st:content="page.header">Header Message</div>
+        <div id="code">
+            <!-- Have to be on one line cause othervise ie6 goes crazy -->
+            <pre id="line-nums" class="line-nums"><a st:loop="line lines" href="#line-1" class="line-num"><st:attr name="href">#line-<span st:replace="line"></span></st:attr><span st:replace="line">1</span><br/></a></pre>
+            <pre id="lines" class="lines"><div st:loop="line lines" id="line-1" class="line"><st:attr name="id">line-<span st:replace="line"></span></st:attr><st:attr name="class"><span st:exec="(line % 2) ? 'line even' : 'line'"></span></st:attr><br/></div></pre>
+            <pre st:xmlstring="code" class="source">function foo(bar) { return 'hello ' + bar; }</pre>
+        </div>
+        <div id="footer" class="panel" st:content="page.footer">Footer Message</div>
+        <!--[if IE]>
+        </span>
+        <![endif]-->
+    </body>
+</html>

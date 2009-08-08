@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:st="http://hyperstruct.net/seethrough#js"
+        xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <meta name="generator" content="JSDocs"/>
+        <title st:content="page.title">JSDoc Reference - ClassName</title>
+        <style type="text/css" st:content="page.style"> </style>
+        <style type="text/css" st:content="page.ieFix"> </style>
+        <st:temp st:condition="false"><link rel="stylesheet" type="text/css" href="styles.css"/></st:temp>
+    </head>
+    <body>
+        <!--[if IE]>
+        <span id="ie">
+        <![endif]-->
+        <div id="header" class="panel" st:content="page.header">Header Message</div>
+        <!-- Block With CSS Magic -->
+        <span st:xmlstring="list">list</span>
+        <!-- /Block With CSS Magic -->
+        <div id="content">
+            <h1 class="classTitle">
+                <span st:condition="isBuiltin" class="builtin">Built-In</span>
+                <span st:condition="isNamespace">
+                    <span st:condition="isFunction" class="function">Function</span>
+                    <span class="namespace">Namespace</span>
+                </span>
+                <span st:condition="isConstructor" class="class">Class</span>
+                <span st:content="alias">ClassName</span>
+            </h1>
+            <p id="summary">
+                <div st:condition="inheritsFrom.length">
+                    <span>Extends:</span>
+                    <code st:loop="element inheritsFrom">
+                        <a st:content="element.alias" class='separated'>
+                            <st:attr name="href">element.link</st:attr>
+                        </a>
+                    </code>
+                </div>
+                <div class="description" st:content="classDesc">Class Description</div>
+                <div st:condition="isBuiltin">
+                    <i>Defined in: </i>
+                    <a st:content="srcFile" href="#sourceLink">
+                        <st:attr name="href">srcLink</st:attr>
+                    </a>
+                </div>
+
+                <div st:condition="author" class="author">
+                    <br/>
+                    <i>Author: </i>
+                    <span st:content="author">Irakli Gozalishvili</span>
+                </div>
+            </p>
+            <table st:condition="hasSummary" id="constructorSummary" class="summaryTable" cellspacing="0" title="A summary of the constructor documented in this class">
+                <caption>
+                    <span st:condition="isBuiltin" class="builtin">Built-In</span>
+                    <span st:condition="isNamespace">
+                        <span st:condition="isFunction" class="function">Function</span>
+                        <span class="namespace">Namespace</span>
+                    </span>
+                    <span st:condition="isFunction" class="class">Class</span>
+                    <span>Summary</span>
+                </caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Constructor Attributes</th>
+                        <th scope="col">Constructor Name and Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="attributes">
+                            <code>
+                                <span st:condition="isPrivare">private</span>
+                                <span st:condition="isInner">inner</span>
+                            </code>
+                        </td>
+                        <td class="nameDescription">
+                            <div>
+                                <st:attr name="class">highlighted</st:attr>
+                                <code>
+                                    <a st:content="constructorLink" href="#constructor" class="keyword">
+                                        Construnctor
+                                    </a>
+                                    <span st:condition="isConstructor"><span class="punctuation">(</span><span><span st:loop="param params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span></span>
+                                </code>
+                                <div st:content="desc" class="description">Contructor decription</div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div st:condition="fields.length" id="fieldSummary" class="fields">
+                <table st:condition="ownFields.length" class="summaryTable" cellspacing="0" title="A summary of the fields documented in this class">
+                    <caption>Field Summary</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Field Attributes</th>
+                            <th scope="col">Field Name and Description</th>
+                        </tr>
+                    </thead>
+                    <tbody st:loop="field ownFields">
+                        <tr>
+                            <td class="attributes">
+                                <code>
+                                    <span st:condition="field.isPrivate">private</span>
+                                    <span st:condition="field.isInner">inner</span>
+                                    <span st:condition="field.isStatic">static</span>
+                                    <span st:condition="field.isConstant">constant</span>
+                                </code>
+                            </td>
+                            <td class="nameDescription">
+                                <code class="code">
+                                    <a href="#fieldLink" class="keyword">
+                                        <st:attr name="href">#<span st:replace="field.name"></span></st:attr>
+                                        <span st:replace="field.name"></span>
+                                    </a>
+                                </code>
+                                <div class="description" st:content="field.desc">field description</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div st:condition="hasInheritedFields">
+                    <dl st:loop="owner fieldOwners" class="inheritsList">
+                        <dt>
+                            <span>Fields borrowed from class:</span>
+                            <code>
+                                <a href="#owner" st:content="owner.self.alias">
+                                    <st:attr name="href">owner.self.link</st:attr>
+                                </a>
+                            </code>
+                        </dt>
+                        <code>
+                            <dd st:loop="filed owner.fields">
+                                <a st:content="field.alias" href="#inheritedField" class="keyword">
+                                    <st:attr name="href">field.link</st:attr>
+                                </a>
+                            </dd>
+                        </code>
+                    </dl>
+                </div>
+            </div>
+            <div st:condition="methods.length" id="methodSummary" class="methods">
+                <table st:condition="ownMethods.length" class="summaryTable" cellspacing="0" title="A summary of the methods documented in this class.">
+                    <caption>Method Summary</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Method Attributes</th>
+                            <th scope="col">Method Name and Description</th>
+                        </tr>
+                    </thead>
+                    <tbody st:loop="method ownMethods">
+                        <tr>
+                            <td class="attributes">
+                                <code>
+                                    <span st:condition="method.isPrivate" class="private">private</span>
+                                    <span st:condition="method.isInner" class="private">inner</span>
+                                    <span st:condition="method.isStatic" class="private">static</span>
+                                </code>
+                            </td>
+                            <td class="nameDescription">
+                                <code class="ignore-line-brakes">
+                                    <a href="#methodLink" class="keyword">
+                                        <st:attr name="href">#<span st:replace="method.name"></span></st:attr>
+                                        <span st:replace="method.name"></span>
+                                    </a>
+                                    <span class="punctuation">(</span><span class="params"><span st:loop="param method.params" class="separated"><span st:replace="param.name">param</span></span></span><span class="punctuation">)</span>
+                                </code>
+                                <div class="description" st:content="method.desc">method description</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div st:condition="hasInheritedMethods">
+                    <dl st:loop="owner methodOwners" class="inheritsList">
+                        <dt>
+                            <span>Methods borrowed from class:</span>
+                            <code>
+                                <a href="#owner" st:content="owner.self.name">
+                                    <st:attr name="href">owner.self.link</st:attr>
+                                </a>
+                            </code>
+                        </dt>
+                        <code>
+                            <dd st:loop="method owner.methods">
+                                <a st:content="method.name" href="#inheritedMethod" class="keyword">
+                                    <st:attr name="href">method.link</st:attr>
+                                </a>
+                            </dd>
+                        </code>
+                    </dl>
+                </div>
+            </div>
+            <div id="details">
+                <div id="constructorDetails">
+                    <div class="sectionTitle">
+                        <span st:condition="isBuiltin" class="builtin">Built-In</span>
+                            <span st:condition="isNamespace">
+                                <span st:condition="isFunction" class="function">Function</span>
+                                <span class="namespace">Namespace</span>
+                            </span>
+                        <span st:condition="isConstructor" class="class">Class</span>
+                        <span>Detail</span>
+                    </div>
+                    <div class="sectionBody">
+                        <code id="constructor">
+                            <span class="attributes">
+                                <span st:condition="isPrivate" class="private">private</span>
+                                <span st:condition="isInner" class="inner">inner</span>
+                            </span>
+                            <span st:content="name" class="keyword">Name</span>
+                            <span st:condition="isConstructor"><span class="punctuation">(</span><span class="params"><span st:loop="param params" class="separated"><span st:replace="param.name">param</span></span></span><span class="punctuation">)</span></span>
+                        </code>
+                        <div st:content="desc" class="description">Description</div>
+                        <div st:condition="example.length">
+                            <div st:loop="code example">
+                                <pre st:exec="highlight(code.toString())" class="example">
+function foo(bar) {
+    return 'hello ' + bar;
+}
+                                </pre>
+                            </div>
+                        </div>
+                        <dl st:condition="params.length" class="detailList">
+                            <dt class="heading">Parameters:</dt>
+                            <span st:loop="param params">
+                                <dt>
+                                    <code>
+                                        <span st:condition="param.type">
+                                            <a href="#paramType"><st:attr name="href">param.type.link</st:attr>{<span st:content="param.type"></span>}</a>
+                                        </span>
+                                        <span st:content="param.name" class="keyword">param.name</span>
+                                        <span st:condition="param.isOptional" class="attributes optional">Optional</span>
+                                        <span st:condition="param.defaultValue" class="optional">
+                                            <span class="attributes">Default:</span>
+                                            <span st:content="param.defaultValue">param.defaultValue</span>
+                                        </span>
+                                    </code>
+                                </dt>
+                                <dd st:content="param.desc" class="description">param.desc</dd>
+                            </span>
+                        </dl>
+                        <dl st:condition="deprecated" class="detailList">
+                            <dt class="heading">Deprecated:</dt>
+                            <dt>
+                                <a st:content="deprecated" href="#deprecatedLink">
+                                    <st:attr name="href">deprecated.link</st:attr>
+                                </a>
+                            </dt>
+                        </dl>
+                        <dl st:condition="since" class="detailList">
+                            <dt class="heading">Since:</dt>
+                            <dd st:content="since">since</dd>
+                        </dl>
+                        <dl st:condition="exceptions.length" class="detailList">
+                            <dt class="heading">Throws:</dt>
+                            <code st:loop="exception exceptions">
+                                <dd>
+                                    <a st:content="exception.type" href="#exceptionClassLink">
+                                        <st:attr name="href">exception.type.link</st:attr>
+                                    </a>
+                                </dd>
+                            </code>
+                        </dl>
+                        <dl st:condition="returns.lenght" class="detailList">
+                            <dt class="heading">Returns:</dt>
+                            <code st:loop="value returns">
+                                <dd>
+                                    <a st:content="value.type.name" href="#returnClassLink">
+                                        <st:attr name="href">value.type.link</st:attr>
+                                    </a>
+                                    <div st:condition="value.desc" st:content="value.desc" class="description">value.desc</div>
+                                </dd>
+                            </code>
+                        </dl>
+                        <dl st:condition="requires.lenght" class="detailList">
+                            <dt class="heading">Requires:</dt>
+                            <code st:loop="requirement requires">
+                                <dd>
+                                    <a st:content="requirement.name" href="#requirementLink">
+                                        <st:attr name="href">requirement.link</st:attr>
+                                    </a>
+                                </dd>
+                            </code>
+                        </dl>
+                        <dl st:condition="see.lenght" class="detailList">
+                            <dt class="heading">See:</dt>
+                            <span st:loop="link see">
+                                <dd>
+                                    <a st:content="link" href="#seeLink">
+                                        <st:attr name="href">link</st:attr>
+                                    </a>
+                                </dd>
+                            </span>
+                        </dl>
+                    </div>
+                </div>
+                <div st:condition="ownFields.length">
+                    <div class="sectionTitle">Field Detail</div>
+                    <div class="sectionBody">
+                        <div st:loop="field ownFields">
+                            <st:attr name="id"><span st:replace="field.name"></span></st:attr>
+                            <code class="title">
+                                <span st:condition="field.isPrivate" class="attributes">private</span>
+                                <span st:condition="field.isInner" class="attributes">inner</span>
+                                <span st:condition="field.isStatic" class="attributes">static</span>
+                                <span st:condition="field.isConstant" class="attributes">constant</span>
+                                <span st:condition="field.type">
+                                    <a href="#filedType"><st:attr name="href">field.type</st:attr>{<span st:content="field.type"></span>}</a>
+                                </span>
+                                <a st:content="field.name" href="#filedLink" class="keyword">
+                                    <st:attr name="href"><span st:replace="field.link"></span></st:attr>
+                                </a>
+                            </code>
+                            <div class="description">
+                                <span st:content="field.desc">field.desc</span>
+                            </div>
+                            <div st:condition="field.srcFile">
+                                <i>Defined in:</i>
+                                <span st:content="field.srcFile">field.srcFile</span>
+                            </div>
+                            <div st:condition="field.author">
+                                <i>Author:</i>
+                                <span st:content="field.author">field.author</span>
+                            </div>
+                            <div st:condition="field.example.length">
+                                 <span st:loop="code field.example">
+                                    <pre st:exec="highlight(code.toString())" class="example">[i in for each(var i in [1,2,3])]</pre>
+                                </span>
+                            </div>
+                            <dl st:condition="field.defaultValue" class="detailList">
+                                <dt class="heading">Default Value:</dt>
+                                <dd st:content="field.defaultValue">field.defaultValue</dd>
+                            </dl>
+                            <dl st:condition="field.deprecated" class="detailList">
+                                <dt class="heading">Deprecated:</dt>
+                                <dd st:content="field.deprecated">field.deprecated</dd>
+                            </dl>
+                            <dl st:condition="field.since" class="detailList">
+                                <dt class="heading">Since:</dt>
+                                <dd st:content="field.since">field.since</dd>
+                            </dl>
+                            <dl st:condition="field.see.length" class="detailList">
+                                <dt class="heading">See:</dt>
+                                <dd st:loop="seeFieldLink field.see">
+                                    <a href="#fieldSeeLink">
+                                        <st:attr name="href">#<span st:replace="seeFieldLink"></span></st:attr>
+                                        <span st:replace="seeFieldLink"></span>
+                                    </a>
+                                </dd>
+                            </dl>
+                            <hr/>
+                        </div>
+                    </div>
+                </div>
+                <div st:condition="ownMethods.length">
+                    <div class="sectionTitle">Method Detail</div>
+                    <div class="sectionBody">
+                        <div st:loop="method ownMethods">
+                            <st:attr name="id"><span st:replace="method.name"></span></st:attr>
+                            <code class="title">
+                                <span class="attributes">
+                                    <span st:condition="method.isPrivate" class="private">private</span>
+                                    <span st:condition="method.isInner" class="private">inner</span>
+                                    <span st:condition="method.isStatic" class="private">static</span>
+                                </span>
+                                <span st:condition="method.type">
+                                    <a st:content="method.type.name" href="#methodType">
+                                        <st:attr name="href"><span st:replace="methodType.type"></span></st:attr>
+                                    </a>
+                                </span>
+                                <a st:content="method.name" href="#methodLink" class="keyword">
+                                    <st:attr name="href"><span st:replace="method.link"></span></st:attr>
+                                </a>
+                                <span class="punctuation">(</span><span><span st:loop="param method.params" class="separated"><span st:content="param.name">param</span></span></span><span class="punctuation">)</span>
+                            </code>
+                            <div class="description">
+                                <span st:content="method.desc">method.desc</span>
+                            </div>
+                            <div st:condition="method.srcFile">
+                                <i>Defined in:</i>
+                                <span st:content="method.srcFile">method.srcFile</span>
+                            </div>
+                            <div st:condition="method.author">
+                                <i>Author:</i>
+                                <span st:content="method.author">method.author</span>
+                            </div>
+                            <div st:condition="method.example.length">
+                                <div st:loop="code method.example">
+                                    <pre st:exec="highlight(code.toString())">[i in for each(var i in [1,2,3])]</pre>
+                                </div>
+                            </div>
+                            <dl st:condition="method.params.length" class="detailList">
+                                <dt class="heading">Parameters:</dt>
+                                <code st:loop="param method.params">
+                                    <dt>
+                                        <span st:condition="param.type">
+                                            <a href="#paramType"><st:attr name="href">param.type.link</st:attr>{<span st:content="param.type"></span>}</a>
+                                        </span>
+                                        <span st:content="param.name" class="keyword">param.name</span>
+                                        <span st:condition="param.isOptional" class="attributes optional">Optional</span>
+                                        <span st:condition="param.defaultValue" class="default">
+                                            <span class="attributes">Default:</span>
+                                            <span st:content="param.defaultValue">param.defaultValue</span>
+                                        </span>
+                                        <div st:content="param.desc" class="description">param.desc</div>
+                                    </dt>
+                                </code>
+                            </dl>
+                            <dl st:condition="method.deprecated" class="detailList">
+                                <dt class="heading">Deprecated:</dt>
+                                <dd st:content="method.deprecated">field.deprecated</dd>
+                            </dl>
+                            <dl st:condition="method.since" class="detailList">
+                                <dt class="heading">Since:</dt>
+                                <dd st:content="method.since">field.since</dd>
+                            </dl>
+                            <dl st:condition="method.exceptions.length" class="detailList">
+                                <dt class="heading">Throws:</dt>
+                                <code st:loop="exception method.exceptions">
+                                    <dd>
+                                        <a st:content="exception.type" href="#exceptionClassLink">
+                                            <st:attr name="href">method.exception.type.link</st:attr>
+                                        </a>
+                                    </dd>
+                                </code>
+                            </dl>
+                            <dl st:condition="method.returns.lenght" class="detailList">
+                                <dt class="heading">Returns:</dt>
+                                <code st:loop="value method.returns">
+                                    <dd>
+                                        <a st:content="value.type.name" href="#returnClassLink">
+                                            <st:attr name="href">value.type.link</st:attr>
+                                        </a>
+                                        <span st:condition="value.desc">
+                                            <div st:content="value.desc" class="description">value.desc</div>
+                                        </span>
+                                    </dd>
+                                </code>
+                            </dl>
+                            <dl st:condition="method.requires.lenght" class="detailList">
+                                <dt class="heading">Requires:</dt>
+                                <code st:loop="requirement method.requires">
+                                    <dd>
+                                        <a st:content="requirement.name" href="#requirementLink">
+                                            <st:attr name="href">requirement.link</st:attr>
+                                        </a>
+                                    </dd>
+                                </code>
+                            </dl>
+                            <dl st:condition="method.see.length" class="detailList">
+                                <dt class="heading">See:</dt>
+                                <dd st:loop="seeMethodlink method.see">
+                                    <a href="#methodSeeLink">
+                                        <st:attr name="href">#<span st:replace="seeMethodlink"></span></st:attr>
+                                        <span st:replace="seeMethodlink"></span>
+                                    </a>
+                                </dd>
+                            </dl>
+                            <hr/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer" class="panel" st:content="page.footer">Footer Message</div>
+        <!--[if IE]>
+        </span>
+        <![endif]-->
+    </body>
+</html>

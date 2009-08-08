@@ -1,0 +1,341 @@
+body {
+    color: #bdae9d;
+    background: #221e1e;
+    font: 12px "Lucida Grande", Tahoma, Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+pre,
+code,
+.line,
+.line-num {
+    font-family: "Bitstream Vera Sans Mono","Monaco","Courier New",monospace;
+    font-size: 12px;
+    line-height: 14px;
+}
+h1 {
+    font-size: 150%;
+    font-weight: bold;
+    padding: 0;
+    margin: 1em 0 0 .3em;
+}
+hr {
+    border: none 0;
+    border-top: 1px dotted #363030;
+    height: 1px;
+}
+
+a {
+    color: #eddac7;
+}
+a.link:after {
+    content: " ⎋"
+}
+a:hover {
+    text-decoration: none;
+}
+.description {
+    color: #aa9361;
+}
+
+pre.example {
+    margin: 4px 40px 4px 5px;
+    border: 1px dotted #363030;
+    padding: 10px 20px;
+    background: #242020;
+}
+code {
+    font-size: 105%;
+}
+code .punctuation,
+code .separated:after {
+    color: #47b8bd;
+}
+
+code a {
+    color: #c4646b;
+}
+
+#index a,
+code a {
+    text-decoration: none;
+}
+code a:hover,
+#index a:hover {
+    text-decoration: underline;
+}
+#index a {
+    padding: 10px;
+    line-height: 18px;
+}
+.keyword,
+a.keyword,
+.keyword a {
+    color: #999efd;
+}
+.attributes {
+    color: #777;
+    font-style: italic;
+}
+.separated:after {
+    content: ", ";
+}
+.separated:last-child:after {
+    content: "";
+}
+
+#header {
+    border-bottom-left-radius: 1em;
+    -webkit-border-bottom-left-radius: 1em;
+    -moz-border-radius-bottomleft: 1em;
+    -khtml-border-bottom-left-radius: 1em;
+    -ms-border-bottom-left-radius: 1em;
+    top: 0px;
+}
+#footer {
+    border-top-left-radius: 1em;
+    -khtml-border-top-left-radius: 1em;
+    -webkit-border-top-left-radius: 1em;
+    -moz-border-radius-topleft: 1em;
+    -ms-border-top-left-radius: 1em;
+    bottom: 0px;
+}
+.panel {
+    z-index: 5;
+    color: #e5c138;
+    position: fixed;
+    right: 0px;
+    background: rgba(70, 70, 70, 0.5);
+    padding: 6px 15px;
+    font-size: 10px;
+}
+#index {
+    z-index: 5;
+    font-size: 10px;
+    color: #EDDAC7;
+    margin: 50px 5px 0px 0px;
+    right: 5px;
+    position: fixed;
+    background: rgba(50, 50, 50, 0.5);
+    padding: 8px;
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+    -khtml-border-radius: 1em;
+    border-radius: 1em;
+}
+
+#content {
+    padding: 10px 200px 0px 25px;
+}
+
+#source,
+.code {
+    padding: 0;
+    margin: 0;
+}
+/* Making only code selectebale in the source */
+#source #header,
+#source #index,
+#source #line-nums,
+#source #footer,
+#source #lines {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+
+.center {
+    text-align: center;
+}
+
+.classList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 0 8px;
+    font-family: arial, sans-serif;
+    font-size: 1em;
+    overflow: auto;
+}
+.classList li {
+    padding: 0;
+    margin: 0 0 8px 0;
+}
+.summaryTable {
+    width: 100%;
+}
+h1.classTitle {
+    font-size:170%;
+    line-height:130%;
+    color: #e5c138;
+}
+h2 { font-size: 140%; }
+caption, div.sectionTitle {
+    color: #e5c138;
+    font-size:130%;
+    text-align: left;
+    padding: 2px 6px 2px 6px;
+    background: rgba(50, 50, 50, 0.5);
+    padding: 8px;
+    -moz-border-radius: 1em;
+    -webkit-border-radius: 1em;
+    -ms-border-radius: 1em;
+    border-radius: 1em;
+}
+.sectionBody {
+    padding: 0 8px;
+}
+div.sectionTitle {
+    background: rgba(100, 90, 70, 0.1);
+}
+
+div.sectionTitle { margin-bottom: 8px; }
+.summaryTable thead { display: none; }
+.summaryTable td {
+    vertical-align: top;
+    padding: 4px;
+    border-bottom: 1px #363030 dotted;
+}
+/*col#summaryAttributes {}*/
+.summaryTable td.attributes {
+    width: 140px;
+    text-align: right;
+}
+.summaryTable td.nameDescription {
+    text-align: left;
+    font-size: 13px;
+    line-height: 15px;
+}
+.summaryTable td.nameDescription, .description {
+    line-height: 15px;
+    padding: 4px;
+    padding-left: 4px;
+}
+.summaryTable { margin-bottom: 8px; }
+ul.inheritsList {
+    list-style: square;
+    margin-left: 20px;
+    padding-left: 0;
+}
+.detailList {
+    margin-left: 20px; 
+    line-height: 15px;
+}
+.detailList dt { margin-left: 20px; }
+.detailList .heading {
+    font-weight: bold;
+    padding-bottom: 6px;
+    margin-left: 0;
+}
+.light, .light a:link, .light a:visited {
+    color: #777;
+    font-style: italic;
+}
+.fineprint {
+    text-align: right;
+    font-size: 10px;
+}
+
+#index:target .collapsed {
+    visibility: inherit;
+}
+
+.source {
+    margin: 0;
+    padding: 10px;
+    z-index: 2;
+    position: relative;
+}
+.line-nums {
+    white-space: normal;
+    position: relative;
+    z-index: 3;
+    float: left;
+    background: #4c4a41;
+    border-right: #47453D;
+    padding: 10px 5px;
+    margin: 0 10px 0 0px;
+    text-align: right;
+}
+.line-num,
+.button {
+    color: #e5c138;
+    text-decoration: none;
+}
+.button {
+    font-weight: bold;
+}
+
+#index a.button:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+.line-num:hover {
+    text-decoration: underline;
+}
+.lines {
+    position: absolute;
+    white-space: normal;
+    z-index: 1;
+    width: 100%;
+    left: 0px;
+}
+.line.even {
+    background: #242020;
+}
+.line:target,
+.line:focus {
+    background: #312D2D;
+    z-index: 4;
+}
+
+/* <CSS Magic for list menu> */
+    /* if target is not a file-index hidding it and show button */
+#index #file-index:not(:target) #file-list {
+    display: none;
+}
+#index #file-index:target .button.show {
+    display: none;
+}
+    /* if target is not a class-index hidding it */
+#index #class-index:not(:target) #class-list {
+    display: none;
+}
+#index #class-index:target .button.show {
+    display: none;
+}
+
+/* </CSS Magic for list menu> */
+
+/* <Syntax Highlighting> */
+
+.str { color: #aa9361; }
+.kwd { color: #999efd; }
+.com { color: #555555; }
+.typ { color: #c4646b; }
+.lit { color: #ea8b1a; }
+.pun { color: #47b8bd; }
+.pln { color: #bdae9d; }
+.tag { color: #ea8b1a; }
+.atn { color: #a83e71; }
+.atv { color: #bfc330; }
+.dec { color: #72D5A2; }
+/*
+.space {
+    border-left: 1px dotted #444444;
+}
+*/
+@media print {
+  .str { color: #060; }
+  .kwd { color: #006; font-weight: bold; }
+  .com { color: #600; font-style: italic; }
+  .typ { color: #404; font-weight: bold; }
+  .lit { color: #044; }
+  .pun { color: #440; }
+  .pln { color: #000; }
+  .tag { color: #006; font-weight: bold; }
+  .atn { color: #404; }
+  .atv { color: #060; }
+}
+
+/** IE6 Fixes **/

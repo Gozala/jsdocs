@@ -1,0 +1,61 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:st="http://hyperstruct.net/seethrough#js"
+        xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <meta name="generator" content="JSDocs"/>
+        <title st:content="page.title">JSDoc Reference - Source</title>
+        <style type="text/css" st:content="page.style"> </style>
+        <st:temp st:condition="false"><link rel="stylesheet" type="text/css" href="styles.css"/></st:temp>
+    </head>
+    <body>
+        <!-- Block With CSS Magic -->
+        <div id="index">
+        <span id="class-index">
+        <span id="file-index">
+            <!-- this button will show class-list -->
+            <a href="#class-index" id="show" class="button show ie-bug">&lt; show</a>
+            <span id="class-list">
+                <!-- this button will hide everything -->
+                <a href="#show" class="button hide ie-bug">&gt; hide</a>
+                <hr class="ie-bug"/>
+                <div class="center">
+                    <span class="ie-bug">
+                        <a href="#class-index">Class Index</a> | <a href="#file-index">File Index</a>
+                        <hr/>
+                    </span>
+                    <h2 class="title class">Classes</h2>
+                    <hr class="ie-bug"/>
+                </div>
+                <div st:loop="element classes" class="list classes">
+                    <a href="#classLink">
+                        <st:attr name="href"><span st:replace="element.link"></span></st:attr>
+                        <span st:replace="element.name"></span>
+                    </a>
+                </div>
+            </span>
+            <span id="file-list">
+                <!-- this button will hide everything -->
+                <a href="#show" class="button hide ie-bug">&gt; hide</a>
+                <hr class="ie-bug"/>
+                <div class="center">
+                    <span class="ie-bug">
+                        <a href="#class-index">Class Index</a> | <a href="#file-index">File Index</a>
+                        <hr/>
+                    </span>
+                    <h2 class="title class">Files</h2>
+                    <hr class="ie-bug"/>
+                </div>
+                <div st:loop="file files" class="list files">
+                    <a href="#fileLink">
+                        <st:attr name="href"><span st:replace="file.link"></span></st:attr>
+                        <span st:replace="file.path"></span>
+                    </a>
+                </div>
+            </span>
+        </span>
+        </span>
+        </div>
+        <!-- /Block With CSS Magic -->
+    </body>
+</html>
