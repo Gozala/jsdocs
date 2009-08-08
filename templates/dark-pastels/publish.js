@@ -165,7 +165,7 @@ exports.publish = function publish(symbolSet, files, Plugins) {
     files.forEach(function(file) {
         try {
             Log.debug('Syntax highlighting file : ' + file);
-            var code = Plugins.syntaxHighlight(file).split('<br/>');
+            var code = file.read().toString().split("<br/>"); //Plugins.syntaxHighlight(file).split('<br/>');
             Log.debug('rendering source template for : ' + file);
             var data = {};
             data[escapePath(file + '.html')] = codeTemplate.render({
