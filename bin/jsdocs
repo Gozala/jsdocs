@@ -105,7 +105,7 @@ function main() {
     }
     //try {
         if (runTests) require('jsunity/tester')
-            .run([require('packages').catalog['JSDocs'].directory], config.verbose);
+            .run([require('packages').catalog['jsdocs'].directory], config.verbose);
         else if (config.sourcesPaths) require('jsdocs/jsdocs').document(config);
         else return printUsage();
     //} catch (e) {
