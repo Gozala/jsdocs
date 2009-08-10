@@ -1,13 +1,13 @@
 {
     "name": "JSDocs",
     "description": "Tool for generating template-formatted, multi-page HTML (or XML, JSON, or any other text-based) documentation from commented JavaScript source code.",
-	"keywords": ["jsdoc", "documentation"],
-    "author": "Irakli Gozalishvili",
-	"email": "rfobic@gmail.com",
+    "keywords": ["jsdoc", "documentation"],
+    "author": "Irakli Gozalishvili(http://rfobic.wordpress.com/)",
+    "email": "rfobic@gmail.com",
     "lib": "lib",
     "license": ["MPL 1.1","GPL 2.0", "LGPL 2.1"],
-    "platform": ["rhino"],
     "dependencies": [
-		"syntaxStroop"
+        "syntaxStroop",
+        "seethrough"
     ]
 }
