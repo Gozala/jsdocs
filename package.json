@@ -7,7 +7,21 @@
     ],
     "author": "Irakli Gozalishvili (http://rfobic.wordpress.com/)",
     "email": "rfobic@gmail.com",
-    "lib": "lib",
+    "lib": [
+        "lib"
+    ],
+    "lean": [
+        "lib",
+        "engines"
+    ],
+    "version": {
+        "label": "0.1",
+        "numeric": [
+            0,
+            1
+        ],
+        "status": "development"
+    },
     "license": [
         "MPL 1.1",
         "GPL 2.0",
