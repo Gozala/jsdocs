@@ -217,7 +217,7 @@ ul.inheritsList {
     padding-left: 0;
 }
 .detailList {
-    margin-left: 20px; 
+    margin-left: 20px;
     line-height: 15px;
 }
 .detailList dt { margin-left: 20px; }
@@ -249,7 +249,6 @@ ul.inheritsList {
     white-space: normal;
     position: relative;
     z-index: 3;
-    float: left;
     background: #4c4a41;
     border-right: #47453D;
     padding: 10px 5px;
@@ -280,7 +279,7 @@ ul.inheritsList {
     width: 100%;
     left: 0px;
 }
-.line.even {
+.line:nth-child(2n) {
     background: #242020;
 }
 .line:target,
@@ -288,7 +287,14 @@ ul.inheritsList {
     background: #312D2D;
     z-index: 4;
 }
-
+.line-num {
+    z-index: 3;
+}
+/*
+.line:before {
+    content: counter(line);
+}
+*/
 /* <CSS Magic for list menu> */
     /* if target is not a file-index hidding it and show button */
 #index #file-index:not(:target) #file-list {

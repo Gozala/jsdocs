@@ -20,7 +20,7 @@
         <div id="code">
             <!-- Have to be on one line cause othervise ie6 goes crazy -->
             <pre id="line-nums" class="line-nums"><a st:loop="line lines" href="#line-1" class="line-num"><st:attr name="href">#line-<span st:replace="line"></span></st:attr><span st:replace="line">1</span><br/></a></pre>
-            <pre id="lines" class="lines"><div st:loop="line lines" id="line-1" class="line"><st:attr name="id">line-<span st:replace="line"></span></st:attr><st:attr name="class"><span st:exec="(line % 2) ? 'line even' : 'line'"></span></st:attr><br/></div></pre>
+            <pre id="lines" class="lines"><div st:loop="line lines" id="line-1" class="line"><st:attr name="id">line-<span st:replace="line"></span></st:attr><br/></div></pre>
             <pre st:xmlstring="code" class="source">function foo(bar) { return 'hello ' + bar; }</pre>
         </div>
         <div id="footer" class="panel" st:content="page.footer">Footer Message</div>
