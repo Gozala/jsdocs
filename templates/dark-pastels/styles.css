@@ -248,6 +248,7 @@ ul.inheritsList {
 .line-nums {
     white-space: normal;
     position: relative;
+    float: left;
     z-index: 3;
     background: #4c4a41;
     border-right: #47453D;
