@@ -1,5 +1,5 @@
 @echo off
 setlocal
 
-narwhal ..\lib\jsdocs\main.js %*
+narwhal %~dp0..\lib\jsdocs\main.js %*
 
