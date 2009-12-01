@@ -5,7 +5,7 @@
  * represent class, object, memeber of the class, comment)</i>
  * @param {JSDOC}
  */
-exports.publish = function publish(symbolSet, files, Plugins) {
+exports.publish = function publish(symbolSet, files, Plugins, options) {
     Log.debug('Setting static varibales');
     /**
      * Map of files paths and data that will be written.
@@ -160,35 +160,36 @@ exports.publish = function publish(symbolSet, files, Plugins) {
         Plugins.publish(data);
     });
 
-
-    Log.debug('Start rendering file source temapltes');
-    files.forEach(function(file) {
-        try {
-            Log.debug('Syntax highlighting file : ' + file);
-            var code = Plugins.syntaxHighlight(file).split('<br/>');
-            Log.debug('rendering source template for : ' + file);
-            var data = {};
-            data[escapePath(file + '.html')] = codeTemplate.render({
-                page: {
-                    title: title,
-                    style: css,
-                    ieFix: ieFix,
-                    header: header,
-                    footer: footer
-                },
-                // hack to fix ie behavior in pre element
-                code: code.join('\n'),
-                lines: code.map(function(value, index) {
-                    return ++index;
-                }),
-                // subtemplate
-                list: list
-            });
-            Plugins.publish(data);
-        } catch (e) {
-            Log.error('Could not highlight source for : ' + file + ' : ' + e.message);
-        }
-    });
+    if (options.includeSource) {
+        Log.debug('Start rendering file source temapltes');
+        files.forEach(function(file) {
+            try {
+                Log.debug('Syntax highlighting file : ' + file);
+                var code = Plugins.syntaxHighlight(file).split('<br/>');
+                Log.debug('rendering source template for : ' + file);
+                var data = {};
+                data[escapePath(file + '.html')] = codeTemplate.render({
+                    page: {
+                        title: title,
+                        style: css,
+                        ieFix: ieFix,
+                        header: header,
+                        footer: footer
+                    },
+                    // hack to fix ie behavior in pre element
+                    code: code.join('\n'),
+                    lines: code.map(function(value, index) {
+                        return ++index;
+                    }),
+                    // subtemplate
+                    list: list
+                });
+                Plugins.publish(data);
+            } catch (e) {
+                Log.error('Could not highlight source for : ' + file + ' : ' + e.message);
+            }
+        });
+    }
     Log.debug('Finished rendering templates');
     return docs;
 };
