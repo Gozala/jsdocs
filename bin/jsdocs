@@ -1,2 +1,2 @@
 #!/usr/bin/env narwhal
-require('jsdocs/jsdocs').main(system.args);
+require('jsdocs').main(system.args);

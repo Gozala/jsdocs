@@ -74,5 +74,6 @@ exports["test:JSDOC.DocComment.shared"] = function() {
     assert.is(com.getTag("author").length, 1, "getTag returns shared tag.");
     assert.is(com.getTag("foo").length, 2, "getTag returns unshared tags too.");
 };
+
 if (require.main == module)
     require("os").exit(require("test/runner").run(exports));
