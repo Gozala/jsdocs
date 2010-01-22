@@ -1,6 +1,15 @@
 /** Called automatically by JsDoc Toolkit. */
 var Link = require("jsdocs/frame/link").Link;
 var JsPlate = require("jsdocs/js-plate").JsPlate;
+var console = require("system").log;
+var OS = require("os");
+var plugins = require("jsdocs/plugin-manager");
+var Symbol = require("jsdocs/symbol").Symbol;
+var DocComment = require("jsdocst/doc-comment").DocComment;
+
+var conf = {
+    extension: ".html"
+}
 exports.publish = function publish(symbolSet, options) {
     publish.conf = {  // trailing slash expected for dirs
         ext:         ".html",
@@ -14,14 +23,15 @@ exports.publish = function publish(symbolSet, options) {
     var template = options.template;
 
     // is source output is suppressed, just display the links to the source file
-    if (JSDOC.opt.s && defined(Link) && Link.prototype._makeSrcLink) {
+    if (options.includeSource && Link !== undefined && Link.prototype._makeSrcLink) {
         Link.prototype._makeSrcLink = function(srcFilePath) {
-            return "&lt;"+srcFilePath+"&gt;";
+            return "&lt;" + srcFilePath + "&gt;";
         }
     }
 
     // create the folders and subfolders to hold the output
-    IO.mkPath((publish.conf.outDir+"symbols/src").split("/"));
+    var dirs = destination.join("symbols","src");
+    if (!dirs.exists()) dirs.mkdirs();
 
     // used to allow Link to check the details of things being linked to
     Link.symbolSet = symbolSet;
@@ -30,10 +40,9 @@ exports.publish = function publish(symbolSet, options) {
     try {
         var classTemplate = new JsPlate(template.join("class.tmpl").read().decodeToString(), "class.tmpl");
         var classesTemplate = new JsPlate(template.join("allclasses.tmpl").read().decodeToString(), "allclasses.tmpl");
-    }
-    catch(e) {
-        print("Couldn't create the required templates: "+e);
-        quit();
+    } catch(e) {
+        console.error("Couldn't create the required templates: " + e.message);
+        OS.exit();
     }
 
     // some ustility filters
@@ -45,18 +54,17 @@ exports.publish = function publish(symbolSet, options) {
     var symbols = symbolSet.toArray();
 
     // create the hilited source code files
-    var files = JSDOC.opt.srcFiles;
-     for (var i = 0, l = files.length; i < l; i++) {
-         var file = files[i];
-         var srcDir = publish.conf.outDir + "symbols/src/";
-        makeSrcFile(file, srcDir);
+    var files = options.files;
+    for (var i = 0, l = files.length; i < l; i++) {
+        makeSrcFile(files[i], destination.join("symbols", "src"));
      }
 
      // get a list of all the classes in the symbolset
      var classes = symbols.filter(isaClass).sort(makeSortby("alias"));
 
     // create a filemap in which outfiles must be to be named uniquely, ignoring case
-    if (JSDOC.opt.u) {
+    var uniqueNames = options.unique;
+    if (uniqueNames) {
         var filemapCounts = {};
         Link.filemap = {};
         for (var i = 0, l = classes.length; i < l; i++) {
@@ -73,7 +81,7 @@ exports.publish = function publish(symbolSet, options) {
 
     // create a class index, displayed in the left-hand column of every class page
     Link.base = "../";
-     publish.classesIndex = classesTemplate.process(classes); // kept in memory
+    publish.classesIndex = classesTemplate.process(classes); // kept in memory
 
     // create each of the class pages
     for (var i = 0, l = classes.length; i < l; i++) {
@@ -83,10 +91,9 @@ exports.publish = function publish(symbolSet, options) {
         symbol.methods = symbol.getMethods(); // 2
 
         Link.currentSymbol= symbol;
-        var output = "";
-        output = classTemplate.process(symbol);
+        var output = classTemplate.process(symbol);
 
-        IO.saveFile(publish.conf.outDir+"symbols/", ((JSDOC.opt.u)? Link.filemap[symbol.alias] : symbol.alias) + publish.conf.ext, output);
+        destination.join("symbols", (uniqueNames ? Link.filemap[symbol.alias] : symbol.alias) + conf.extension).write(output)
     }
 
     // regenerate the index with different relative links, used in the index pages
@@ -95,25 +102,29 @@ exports.publish = function publish(symbolSet, options) {
 
     // create the class index page
     try {
-        var classesindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"index.tmpl");
+        var classesindexTemplate = new JsPlate(template.join("index.tmpl").read().decodeToString());
+    } catch(e) {
+        console.error(e.message);
+        OS.exit()
     }
-    catch(e) { print(e.message); quit(); }
 
     var classesIndex = classesindexTemplate.process(classes);
-    IO.saveFile(publish.conf.outDir, "index"+publish.conf.ext, classesIndex);
+    destination.join("index" + conf.extension).write(classesIndex);
     classesindexTemplate = classesIndex = classes = null;
 
     // create the file index page
     try {
-        var fileindexTemplate = new JSDOC.JsPlate(publish.conf.templatesDir+"allfiles.tmpl");
+        var fileindexTemplate = new JsPlate(template.join("allfiles.tmpl").read().decodeToString());
+    } catch(e) {
+        console.error(e.message);
+        OS.exit()
     }
-    catch(e) { print(e.message); quit(); }
 
     var documentedFiles = symbols.filter(isaFile); // files that have file-level docs
     var allFiles = []; // not all files have file-level docs, but we need to list every one
 
     for (var i = 0; i < files.length; i++) {
-        allFiles.push(new JSDOC.Symbol(files[i], [], "FILE", new JSDOC.DocComment("/** */")));
+        allFiles.push(new Symbol(files[i], [], "FILE", new DocComment("/** */")));
     }
 
     for (var i = 0; i < documentedFiles.length; i++) {
@@ -125,7 +136,7 @@ exports.publish = function publish(symbolSet, options) {
 
     // output the file index page
     var filesIndex = fileindexTemplate.process(allFiles);
-    IO.saveFile(publish.conf.outDir, "files"+publish.conf.ext, filesIndex);
+    destination.join("files" + conf.extension).write(filesIndex);
     fileindexTemplate = filesIndex = files = null;
 }
 
@@ -156,23 +167,22 @@ function include(path) {
 }
 
 /** Turn a raw source file into a code-hilited page in the docs. */
-function makeSrcFile(path, srcDir, name) {
-    if (JSDOC.opt.s) return;
-
+function makeSrcFile(path, destination, name) {
+    if (!options.includeSource) return;
     if (!name) {
-        name = path.replace(/\.\.?[\\\/]/g, "").replace(/[\\\/]/g, "_");
-        name = name.replace(/\:/g, "_");
+        name = path.toString()
+            .replace(/\.\.?[\\\/]/g, "")
+            .replace(/[\\\/]/g, "_")
+            .replace(/\:/g, "_");
     }
-
-    var src = {path: path, name:name, charset: IO.encoding, hilited: ""};
-
-    if (defined(JSDOC.PluginManager)) {
-        JSDOC.PluginManager.run("onPublishSrc", src);
-    }
-
-    if (src.hilited) {
-        IO.saveFile(srcDir, name+publish.conf.ext, src.hilited);
-    }
+    var content, src;
+    plugins.notify("onPublishSrc", (src = {
+        path: path,
+        name: name,
+        charset: options.encoding,
+        highlighted: null
+    }));
+    if (content = src.highlighted) destination.join(name + conf.extension).write(content);
 }
 
 /** Build output for displaying function parameters. */
