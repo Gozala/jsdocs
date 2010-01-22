@@ -5,20 +5,10 @@ var console = require("system").log;
 var OS = require("os");
 var plugins = require("jsdocs/plugin-manager");
 var Symbol = require("jsdocs/symbol").Symbol;
-var DocComment = require("jsdocst/doc-comment").DocComment;
+var DocComment = require("jsdocs/doc-comment").DocComment;
 
-var conf = {
-    extension: ".html"
-}
+var conf = { extension: ".html" }
 exports.publish = function publish(symbolSet, options) {
-    publish.conf = {  // trailing slash expected for dirs
-        ext:         ".html",
-        outDir:      JSDOC.opt.d || SYS.pwd+"../out/jsdoc/",
-        templatesDir: JSDOC.opt.t || SYS.pwd+"../templates/jsdoc/",
-        symbolsDir:  "symbols/",
-        srcDir:      "symbols/src/"
-    };
-
     var destination = options.destination.join("jsdoc");
     var template = options.template;
 
@@ -38,8 +28,8 @@ exports.publish = function publish(symbolSet, options) {
 
     // create the required templates
     try {
-        var classTemplate = new JsPlate(template.join("class.tmpl").read().decodeToString(), "class.tmpl");
-        var classesTemplate = new JsPlate(template.join("allclasses.tmpl").read().decodeToString(), "allclasses.tmpl");
+        var classTemplate = new JsPlate(template.join("class.tmpl").read().toString(), "class.tmpl");
+        var classesTemplate = new JsPlate(template.join("allclasses.tmpl").read().toString(), "allclasses.tmpl");
     } catch(e) {
         console.error("Couldn't create the required templates: " + e.message);
         OS.exit();
@@ -55,9 +45,11 @@ exports.publish = function publish(symbolSet, options) {
 
     // create the hilited source code files
     var files = options.files;
-    for (var i = 0, l = files.length; i < l; i++) {
-        makeSrcFile(files[i], destination.join("symbols", "src"));
-     }
+    if (options.includeSource) {
+        for (var i = 0, l = files.length; i < l; i++) {
+            makeSrcFile(files[i], destination.join("symbols", "src"), null, options.encoding);
+        }
+    }
 
      // get a list of all the classes in the symbolset
      var classes = symbols.filter(isaClass).sort(makeSortby("alias"));
@@ -102,7 +94,7 @@ exports.publish = function publish(symbolSet, options) {
 
     // create the class index page
     try {
-        var classesindexTemplate = new JsPlate(template.join("index.tmpl").read().decodeToString());
+        var classesindexTemplate = new JsPlate(template.join("index.tmpl").read().toString());
     } catch(e) {
         console.error(e.message);
         OS.exit()
@@ -114,7 +106,7 @@ exports.publish = function publish(symbolSet, options) {
 
     // create the file index page
     try {
-        var fileindexTemplate = new JsPlate(template.join("allfiles.tmpl").read().decodeToString());
+        var fileindexTemplate = new JsPlate(template.join("allfiles.tmpl").read().toString());
     } catch(e) {
         console.error(e.message);
         OS.exit()
@@ -167,8 +159,7 @@ function include(path) {
 }
 
 /** Turn a raw source file into a code-hilited page in the docs. */
-function makeSrcFile(path, destination, name) {
-    if (!options.includeSource) return;
+function makeSrcFile(path, destination, name, encoding) {
     if (!name) {
         name = path.toString()
             .replace(/\.\.?[\\\/]/g, "")
@@ -179,7 +170,7 @@ function makeSrcFile(path, destination, name) {
     plugins.notify("onPublishSrc", (src = {
         path: path,
         name: name,
-        charset: options.encoding,
+        charset: encoding,
         highlighted: null
     }));
     if (content = src.highlighted) destination.join(name + conf.extension).write(content);
