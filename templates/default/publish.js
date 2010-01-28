@@ -6,11 +6,16 @@ var OS = require("os");
 var plugins = require("jsdocs/plugin-manager");
 var Symbol = require("jsdocs/symbol").Symbol;
 var DocComment = require("jsdocs/doc-comment").DocComment;
+var FILE = require("file");
 
-var conf = { extension: ".html" }
+var conf = { extension: ".html" };
+Link.ext = conf.extension;
+var destination, template, symbols, encoding, VERSION, copyright;
 exports.publish = function publish(symbolSet, options) {
-    var destination = options.destination.join("jsdoc");
-    var template = options.template;
+    destination = options.destination.join("jsdoc");
+    // TODO: fix link module properly
+    template = Link.template = options.template;
+    encoding = options.encoding;
 
     // is source output is suppressed, just display the links to the source file
     if (options.includeSource && Link !== undefined && Link.prototype._makeSrcLink) {
@@ -20,7 +25,8 @@ exports.publish = function publish(symbolSet, options) {
     }
 
     // create the folders and subfolders to hold the output
-    var dirs = destination.join("symbols","src");
+    var symbols = Link.symbolsDir = destination.join("symbols");
+    var dirs = Link.srcDir = symbols.join("src");
     if (!dirs.exists()) dirs.mkdirs();
 
     // used to allow Link to check the details of things being linked to
@@ -72,8 +78,9 @@ exports.publish = function publish(symbolSet, options) {
     }
 
     // create a class index, displayed in the left-hand column of every class page
+    // TODO: don't access this damn Link
     Link.base = "../";
-    publish.classesIndex = classesTemplate.process(classes); // kept in memory
+    Link.classesIndex = classesTemplate.process(classes); // kept in memory
 
     // create each of the class pages
     for (var i = 0, l = classes.length; i < l; i++) {
@@ -90,7 +97,8 @@ exports.publish = function publish(symbolSet, options) {
 
     // regenerate the index with different relative links, used in the index pages
     Link.base = "";
-    publish.classesIndex = classesTemplate.process(classes);
+    // TODO: don't access this damn Link
+    Link.classesIndex = classesTemplate.process(classes);
 
     // create the class index page
     try {
@@ -154,8 +162,7 @@ function makeSortby(attribute) {
 
 /** Pull in the contents of an external file at the given path. */
 function include(path) {
-    var path = publish.conf.templatesDir+path;
-    return IO.readFile(path);
+    return template.join(path).read().toString();
 }
 
 /** Turn a raw source file into a code-hilited page in the docs. */
