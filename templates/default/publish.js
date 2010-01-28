@@ -12,7 +12,7 @@ var conf = global.conf = { extension: ".html" };
 Link.ext = conf.extension;
 var destination, template, symbols, encoding, VERSION, copyright;
 exports.publish = function publish(symbolSet, options) {
-    destination = options.destination.join("jsdoc");
+    destination = options.destination;
     // TODO: fix link module properly
     template = Link.template = options.template;
     encoding = options.encoding;
@@ -102,24 +102,13 @@ exports.publish = function publish(symbolSet, options) {
     global.conf.classesIndex = classesTemplate.process(classes);
 
     // create the class index page
-    try {
-        var classesindexTemplate = new JsPlate(template.join("index.tmpl").read().toString(), "index.tmpl");
-    } catch(e) {
-        console.error(e.message);
-        OS.exit()
-    }
-
+    var classesindexTemplate = new JsPlate(template.join("index.tmpl").read().toString(), "index.tmpl");
     var classesIndex = classesindexTemplate.process(classes);
     destination.join("index" + conf.extension).write(classesIndex);
     classesindexTemplate = classesIndex = classes = null;
 
     // create the file index page
-    try {
-        var fileindexTemplate = new JsPlate(template.join("allfiles.tmpl").read().toString(), "allfiles.tmpl");
-    } catch(e) {
-        console.error(e.message);
-        OS.exit()
-    }
+    var fileindexTemplate = new JsPlate(template.join("allfiles.tmpl").read().toString(), "allfiles.tmpl");
 
     var documentedFiles = symbols.filter(isaFile); // files that have file-level docs
     var allFiles = []; // not all files have file-level docs, but we need to list every one
