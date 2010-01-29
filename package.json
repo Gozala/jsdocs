@@ -1,34 +1,36 @@
 {
     "name": "jsdocs",
-    "description": "Tool for generating template-formatted, multi-page HTML (or XML, JSON, or any other text-based) documentation from commented JavaScript source code.",
-    "keywords": [
-        "jsdoc",
-        "documentation"
+    "description": "JavaScript documentation generator. Tool for generating template-formatted, multi-page HTML (or XML, JSON, or any other text-based) documentation from commented JavaScript source code.",
+    "version": "0.1.0",
+    "keywords": ["jsdoc", "documentation"],
+    "maintainers": [
+        {
+            "name": "Irakli Gozalishvili",
+            "email": "rfobic@gmail.com",
+            "web": "http://rfobic.wordpress.com/"
+        }
     ],
-    "author": "Irakli Gozalishvili (http://rfobic.wordpress.com/)",
-    "email": "rfobic@gmail.com",
-    "lib": [
-        "lib"
+    "contributors": [
+        {
+            "name": "Irakli Gozalishvili",
+            "email": "rfobic@gmail.com",
+            "web": "http://rfobic.wordpress.com/"
+        }
     ],
-    "lean": [
-        "lib",
-        "engines"
+    "bugs": { "web": "http://github.com/Gozala/jsdocs/issues/" },
+    "licenses": [
+        { "type": "MIT" }
     ],
-    "version": {
-        "label": "0.1",
-        "numeric": [
-            0,
-            1
-        ],
-        "status": "development"
-    },
-    "license": [
-        "MPL 1.1",
-        "GPL 2.0",
-        "LGPL 2.1"
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git://github.com/Gozala/jsdocs.git",
+        }
     ],
-    "dependencies": [
-        "syntax-stroop",
-        "seethrough"
-    ]
+    "os": ["linux", "macos", "win"],
+    "cpu": ["x86", "ppc", "x86_64"],
+    "directories": {
+        "lib": "lib",
+        "bin": "bin"
+    }
 }
