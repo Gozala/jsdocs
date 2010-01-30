@@ -1,21 +1,21 @@
 /** Called automatically by JsDoc Toolkit. */
 var Link = require("jsdocs/frame/link").Link;
-var JsPlate = require("jsdocs/js-plate").JsPlate;
 var console = require("system").log;
-var OS = require("os");
 var plugins = require("jsdocs/plugin-manager");
 var Symbol = require("jsdocs/symbol").Symbol;
 var DocComment = require("jsdocs/doc-comment").DocComment;
 var FILE = require("file");
+var Template = require("json-template").Template;
 
-var conf = global.conf = { extension: ".html" };
-Link.ext = conf.extension;
-var destination, template, symbols, encoding, VERSION, copyright;
+var GLOBAL = "_global_";
 exports.publish = function publish(symbolSet, options) {
-    destination = options.destination;
-    // TODO: fix link module properly
-    template = Link.template = options.template;
-    encoding = options.encoding;
+    var extension = Link.ext = ".html" || options.extension;
+    var template = options.template;
+    var encoding = "utf-8" || options.encoding;
+    var style = template.join("static", "default.css").read().toString();
+    var header = template.join("static", "header.html").read().toString();
+    
+    var destination = options.destination;
 
     // is source output is suppressed, just display the links to the source file
     if (options.includeSource && Link !== undefined && Link.prototype._makeSrcLink) {
@@ -32,14 +32,9 @@ exports.publish = function publish(symbolSet, options) {
     // used to allow Link to check the details of things being linked to
     Link.symbolSet = symbolSet;
 
-    // create the required templates
-    try {
-        var classTemplate = new JsPlate(template.join("class.tmpl").read().toString(), "class.tmpl");
-        var classesTemplate = new JsPlate(template.join("allclasses.tmpl").read().toString(), "allclasses.tmpl");
-    } catch(e) {
-        console.error("Couldn't create the required templates: " + e.message);
-        OS.exit();
-    }
+    // create the required templates    
+    //var classTemplate = Template(template.join("class.tmpl").read().toString());
+    var classesTemplate = Template(template.join("allclasses.tmpl").read().toString());
 
     // some ustility filters
     function hasNoParent($) {return ($.memberOf == "")}
@@ -61,8 +56,7 @@ exports.publish = function publish(symbolSet, options) {
      var classes = symbols.filter(isaClass).sort(makeSortby("alias"));
 
     // create a filemap in which outfiles must be to be named uniquely, ignoring case
-    var uniqueNames = options.unique;
-    if (uniqueNames) {
+    if (options.unique) {
         var filemapCounts = {};
         Link.filemap = {};
         for (var i = 0, l = classes.length; i < l; i++) {
@@ -80,7 +74,17 @@ exports.publish = function publish(symbolSet, options) {
     // create a class index, displayed in the left-hand column of every class page
     // TODO: don't access this damn Link
     Link.base = "../";
-    Link.classesIndex = classesTemplate.process(classes); // kept in memory
+    var classesLink = Link().toFile("index.html").withText("Class Index");
+    var filesLink = Link().toFile("files.html").withText("File Index");
+    
+    var classesIndex = classesTemplate.expand({ // kept in memory
+        classesLink: classesLink,
+        filesIndex: filesIndex,
+        items: classes.map(function(item) {
+            var alias = item.alias, link = Link().toClass(alias);
+            return (alias == GLOBAL) ? "<i>" + link + "</i>" : link;
+        })
+    });
 
     // create each of the class pages
     for (var i = 0, l = classes.length; i < l; i++) {
@@ -91,9 +95,10 @@ exports.publish = function publish(symbolSet, options) {
 
 
         Link.currentSymbol = symbol;
-        var output = classTemplate.process(symbol);
-
-        destination.join("symbols", (uniqueNames ? Link.filemap[symbol.alias] : symbol.alias) + conf.extension).write(output)
+        var name = uniqueNames ? Link.filemap[symbol.alias] : symbol.alias;
+        destination.join("symbols", name + extension).write(classTemplate.expand({
+            
+        }));
     }
 
     // regenerate the index with different relative links, used in the index pages
@@ -108,7 +113,7 @@ exports.publish = function publish(symbolSet, options) {
     classesindexTemplate = classesIndex = classes = null;
 
     // create the file index page
-    var fileindexTemplate = new JsPlate(template.join("allfiles.tmpl").read().toString(), "allfiles.tmpl");
+    var fileindexTemplate = new Template(template.join("allfiles.tmpl").read().toString());
 
     var documentedFiles = symbols.filter(isaFile); // files that have file-level docs
     var allFiles = []; // not all files have file-level docs, but we need to list every one
@@ -125,7 +130,10 @@ exports.publish = function publish(symbolSet, options) {
     allFiles = allFiles.sort(makeSortby("name"));
 
     // output the file index page
-    var filesIndex = fileindexTemplate.process(allFiles);
+    var filesIndex = fileindexTemplate.expand({
+        title: new Link().toFile("files.html").withText("File Index"),
+        files: allFiles
+    });
     destination.join("files" + conf.extension).write(filesIndex);
     fileindexTemplate = filesIndex = files = null;
 }
