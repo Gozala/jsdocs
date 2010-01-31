@@ -55,7 +55,7 @@
                                 <b>{link}</b>
                                 {.section paramsString}({@}){.end}
                             </div>
-                            <div class="description">{decsription}</div>
+                            <div class="description">{description}</div>
                         </td>
                     </tr>
                 </tbody>
@@ -103,11 +103,11 @@
                 {.end}
                 </dl>
             {.end}
+        {.end}
 <!-- ============================== methods summary ======================== -->
-            <if test="data.methods.length">
+        {.section ownMethods}
                 {! var ownMethods = data.methods.filter(function($){return $.memberOf == data.alias  && !$.isNamespace}).sort(makeSortby("name")); !}
-                <if test="ownMethods.length">
-                <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class {+data.alias+}.">
+                <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class.">
                     <caption>Method Summary</caption>
                     <thead>
                         <tr>
@@ -132,8 +132,8 @@
                     </for>
                     </tbody>
                 </table>
-                </if>
-
+        {.end}
+        {.section methodContributers}
                 <if test="data.inheritsFrom.length">
                 <dl class="inheritsList">
                 {!
@@ -160,8 +160,7 @@
 
                 !}
                 </dl>
-                </if>
-            </if>
+        {.end}
 <!-- ============================== events summary ======================== -->
             <if test="data.events.length">
                 {! var ownEvents = data.events.filter(function($){return $.memberOf == data.alias  && !$.isNamespace}).sort(makeSortby("name")); !}
@@ -581,7 +580,6 @@
 
             <hr />
         </div>
-        {.end}
 <!-- ============================== footer ================================= -->
         {footer}
     </body>
