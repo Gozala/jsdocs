@@ -59,6 +59,7 @@
             {.end}
             <!-- ============================== properties summary ===================== -->
             {.section properties}
+            {.section own}
             <table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class.">
                 <caption>Field Summary</caption>
                 <thead>
@@ -67,7 +68,6 @@
                         <th scope="col">Field Name and Description</th>
                     </tr>
                 </thead>
-                {.section own}
                 <tbody>
                     {.repeated section @}
                     <tr>
@@ -88,8 +88,8 @@
                     </tr>
                     {.end}
                 </tbody>
-                {.end}
             </table>
+            {.end}
             {.section inherited}
             <dl class="inheritsList">
                 {.repeated section @}
@@ -101,6 +101,7 @@
             {.end}
             <!-- ============================== methods summary ======================== -->
             {.section methods}
+            {.section own}
             <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class.">
                 <caption>Method Summary</caption>
                 <thead>
@@ -109,7 +110,6 @@
                         <th scope="col">Method Name and Description</th>
                     </tr>
                 </thead>
-                {.section own}
                 <tbody>
                     {.repeated section @}
                     <tr>
@@ -130,8 +130,8 @@
                     </tr>
                     {.end}
                 </tbody>
-                {.end}
             </table>
+            {.end}
             {.section inherited}
             <dl class="inheritsList">
                 {.repeated section @}
@@ -142,66 +142,48 @@
             {.end}
             {.end}
             <!-- ============================== events summary ======================== -->
-            <if test="data.events.length">
-                {! var ownEvents = data.events.filter(function($){return $.memberOf == data.alias  && !$.isNamespace}).sort(makeSortby("name")); !}
-                <if test="ownEvents.length">
-                <table class="summaryTable" cellspacing="0" summary="A summary of the events documented in the class {+data.alias+}.">
-                    <caption>Event Summary</caption>
-                    <thead>
-                        <tr>
-                            <th scope="col">Event Attributes</th>
-                            <th scope="col">Event Name and Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <for each="member" in="ownEvents">
-                        <tr>
-                            <td class="attributes">{!
-                                if (member.isPrivate) output += "&lt;private&gt; ";
-                                if (member.isInner) output += "&lt;inner&gt; ";
-                                if (member.isStatic) output += "&lt;static&gt; ";
-                            !}&nbsp;</td>
-                            <td class="nameDescription">
-                                <div class="fixedFont"><if test="member.isStatic && member.memberOf != '_global_'">{+member.memberOf+}.</if><b>{+new Link().toSymbol(member.alias).withText(member.name)+}</b>{+makeSignature(member.params)+}
-                                </div>
-                                <div class="description">{+resolveLinks(summarize(member.desc))+}</div>
-                            </td>
-                        </tr>
-                    </for>
-                    </tbody>
-                </table>
-                </if>
-
-                <if test="data.inheritsFrom.length">
-                <dl class="inheritsList">
-                {!
-                    var borrowedMembers = data.events.filter(function($) {return $.memberOf != data.alias});
-                    var contributers = [];
-                    borrowedMembers.map(function($) {if (contributers.indexOf($.memberOf) < 0) contributers.push($.memberOf)});
-                    for (var i = 0, l = contributers.length; i < l; i++) {
-                        output +=
-                            "<dt>Events borrowed from class "+new Link().toSymbol(contributers[i])+": </dt>"
-                            +
-                            "<dd>" +
-                            borrowedMembers
-                            .filter(
-                                function($) { return $.memberOf == contributers[i] }
-                            )
-                            .sort(makeSortby("name"))
-                            .map(
-                                function($) { return new Link().toSymbol($.alias).withText($.name) }
-                            )
-                            .join(", ")
-                            +
-                            "</dd>";
-                    }
-
-                !}
-                </dl>
-                </if>
-            </if>
-
-<!-- ============================== constructor details ==================== -->
+            {.section events}
+            {.section own}
+            <table class="summaryTable" cellspacing="0" summary="A summary of the events documented in the class.">
+                <caption>Event Summary</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Event Attributes</th>
+                        <th scope="col">Event Name and Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {.repeated section @}
+                    <tr>
+                        <td class="attributes">
+                            {.section isPrivate}&lt;private&gt; {.end}
+                            {.section isInner}&lt;inner&gt; {.end}
+                            {.section isStatic}&lt;static&gt; {.end}
+                            &nbsp;
+                        </td>
+                        <td class="nameDescription">
+                            <div class="fixedFont">
+                                {.section memberOf}{@}{.end}
+                                <b>{link}</b>
+                                {.section paramsString}({@}){.end}
+                            </div>
+                            <div class="description">{description}</div>
+                        </td>
+                    </tr>
+                    {.end}
+                </tbody>
+            </table>
+            {.end}
+            {.section inherited}
+            <dl class="inheritsList">
+                {.repeated section @}
+                <dt>Events inherited from class {link}: </dt>
+                {.repeated section methods}<dd>{link}</dd>{.end}
+                {.end}
+            </dl>
+            {.end}
+            {.end}
+            <!-- ============================== constructor details ==================== -->
             <if test="!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR'))">
             <div class="details"><a name="constructor"> </a>
                 <div class="sectionTitle">
@@ -560,6 +542,7 @@
 
             <hr />
         </div>
+        {.end}
 <!-- ============================== footer ================================= -->
         {footer}
     </body>

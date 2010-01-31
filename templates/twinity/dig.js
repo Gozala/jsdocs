@@ -71,6 +71,10 @@ var properties = exports.properties = function properties(symbol, data) {
 var methods = exports.methods = function methods(symbol, data) {
     return members("methods", symbol, data || {});
 }
+var events = exports.events = function events(symbol, data) {
+    return members("events", symbol, data || {});
+}
+
 var member = exports.member = function member(symbol, data) {
     data = data || {};
     var name = data.name = symbol.name;
@@ -98,6 +102,7 @@ var methodsMember = exports.methodsMember = function methodsMember(symbol, data)
     }
     return data;
 }
+var eventsMember = methodsMember;
 var members = exports.members = function members(type, symbol, data) {
     data = data || {};
     var alias = symbol.alias;
@@ -130,7 +135,7 @@ var members = exports.members = function members(type, symbol, data) {
     return data;
 }
 var Class = exports.Class = function Class(symbol, data) {
-    return methods(symbol, properties(symbol, constructor(symbol, extend(symbol, type(symbol)))));
+    return events(symbol, methods(symbol, properties(symbol, constructor(symbol, extend(symbol, type(symbol))))));
 };
 
 exports.toJSON = function toJSON(symbol) {
