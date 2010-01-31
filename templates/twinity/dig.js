@@ -66,42 +66,71 @@ var constructor = exports.constructor = function constructor(symbol, data) {
     return data;
 }
 var properties = exports.properties = function properties(symbol, data) {
+    return members("properties", symbol, data || {});
+}
+var methods = exports.methods = function methods(symbol, data) {
+    return members("methods", symbol, data || {});
+}
+var member = exports.member = function member(symbol, data) {
+    data = data || {};
+    var name = data.name = symbol.name;
+    var alias = data.alias = symbol.alias;
+    data.isPrivate = symbol.isPrivate;
+    data.isInner = symbol.isInner;
+    var isStatic = data.isStatic = symbol.isStatic;
+    var memberOf = symbol.memberOf
+    data.memberOf = (isStatic && memberOf != GLOBAL) ? memberOf : null;
+    data.description = UTILS.resolveLinks(UTILS.summarize(member.desc));
+    data.link = Link().toSymbol(alias).withText(name.replace(/\^\d+$/, ''));
+    return data;
+}
+var propertiesMember = exports.propertiesMember = function propertiesMember(symbol, data) {
+    data = member(symbol, data || {});
+    data.isConstant = symbol.isConstant;
+    return data;
+}
+var methodsMember = exports.methodsMember = function methodsMember(symbol, data) {
+    data = member(symbol, data || {});
+    var params = symbol.params;
+    if (params) {
+        data.params = params;
+        data.paramsString = UTILS.makeSignature(params);
+    }
+    return data;
+}
+var members = exports.members = function members(type, symbol, data) {
     data = data || {};
     var alias = symbol.alias;
-    var properties = symbol.properties, l = properties.length;
-    var ownProperties = [], propertyContributers = [], contributers = {};
+    var members = symbol[type], l = members.length;
+    var own = [], memberContributers = [], contributers = {};
     while (l--) {
-        var property = properties[l];
-        var memberOf = property.memberOf;
-        if (memberOf == alias && !property.isNamespace) { // own
-            ownProperties.unshift({
-                "name": property.name,
-                "isPrivate": property.isPrivate,
-                "isInner": property.isInner,
-                "isStatic": property.isStatic,
-                "isConstant": property.isConstant,
-                "memberOf": (property.isStatic && memberOf != GLOBAL)
-                    ? property.memberOf : null,
-                "link": Link().toSymbol(alias).withText(property.name),
-                "description": UTILS.resolveLinks(UTILS.summarize(property.desc))
-            });
+        var member = members[l];
+        var memberOf = member.memberOf;
+        if (memberOf == alias && !member.isNamespace) { // own
+            own.unshift(exports[type + "Member"](member));
         } else if (memberOf != alias) { // inhereted
             var contributer = contributers[memberOf];
             if (!contributer) {
-                contributer = contributers[memberOf] = {}
+                memberContributers.push(contributer = contributers[memberOf] = {});
                 contributer.link = Link().toSymbol(memberOf);
-                contributer.properties = [];
-                propertyContributers.push(contributer);
+                contributer[type] = [];
             }
-            contributer.properties.push(Link().toSymbol(property.alias).withText(property.name));
+            contributer[type].push({
+                link: Link().toSymbol(member.alias).withText(member.name),
+                name: member.name,
+                alias: memeber.alias
+            });
         }
     }
-    if (ownProperties.length) data.ownProperties = ownProperties;
-    if (propertyContributers.length) data.propertyContributers = propertyContributers;
+    if (own.length || memberContributers.length) {
+        members = data[type] = {};
+        if (own.length) members.own = own;
+        if (memberContributers.length) members.inherited = memberContributers;
+    }
     return data;
 }
 var Class = exports.Class = function Class(symbol, data) {
-    return properties(symbol, constructor(symbol, extend(symbol, type(symbol))));
+    return methods(symbol, properties(symbol, constructor(symbol, extend(symbol, type(symbol)))));
 };
 
 exports.toJSON = function toJSON(symbol) {

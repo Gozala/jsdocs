@@ -106,7 +106,7 @@ exports.publish = function publish(symbolSet, options) {
         Link.currentSymbol = symbol;
         var name = options.uniqueNames ? Link.filemap[symbol.alias] : symbol.alias;
         var json = DIG.Class(symbol);
-        print(JSON.stringify(json));
+        print("\n\n" + JSON.stringify(json) + "\n\n");
         destination.join("symbols", name + extension).write(classTemplate.expand({
             "encoding": encoding,
             "header": header,

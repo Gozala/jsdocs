@@ -40,7 +40,7 @@ exports.makeSignature = function makeSignature(params) {
     return ("" +
         params.filter(function(param) {
             return param.name.indexOf(".") == -1; // don't show config params in signature
-        }).map(function($) {
+        }).map(function(param) {
             return param.name;
         }).join(", ") + "");
 }
