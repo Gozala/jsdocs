@@ -9,11 +9,17 @@ var Template = require("json-template").Template;
 
 var GLOBAL = "_global_";
 exports.publish = function publish(symbolSet, options) {
+    var version = "0.1";
+    var date = new Date();
     var extension = Link.ext = ".html" || options.extension;
     var template = options.template;
     var encoding = "utf-8" || options.encoding;
     var style = template.join("static", "default.css").read().toString();
     var header = template.join("static", "header.html").read().toString();
+    var footer = Template(template.join("static", "footer.html").read().toString()).expand({
+        version: version,
+        date: date
+    });
     
     var destination = options.destination;
 
@@ -33,7 +39,7 @@ exports.publish = function publish(symbolSet, options) {
     Link.symbolSet = symbolSet;
 
     // create the required templates    
-    //var classTemplate = Template(template.join("class.tmpl").read().toString());
+    var classTemplate = Template(template.join("class.tmpl").read().toString());
     var classesTemplate = Template(template.join("allclasses.tmpl").read().toString());
 
     // some ustility filters
@@ -77,9 +83,9 @@ exports.publish = function publish(symbolSet, options) {
     var classesLink = Link().toFile("index.html").withText("Class Index");
     var filesLink = Link().toFile("files.html").withText("File Index");
     
-    var classesIndex = classesTemplate.expand({ // kept in memory
+    var index = classesTemplate.expand({ // kept in memory
         classesLink: classesLink,
-        filesIndex: filesIndex,
+        filesLink: filesLink,
         items: classes.map(function(item) {
             var alias = item.alias, link = Link().toClass(alias);
             return (alias == GLOBAL) ? "<i>" + link + "</i>" : link;
@@ -95,11 +101,20 @@ exports.publish = function publish(symbolSet, options) {
 
 
         Link.currentSymbol = symbol;
-        var name = uniqueNames ? Link.filemap[symbol.alias] : symbol.alias;
+        var name = options.uniqueNames ? Link.filemap[symbol.alias] : symbol.alias;
+        var json = toJSON(symbol);
+        print(JSON.stringify(json))
         destination.join("symbols", name + extension).write(classTemplate.expand({
-            
+            "encoding": encoding,
+            "header": header,
+            "footer": footer,
+            "style": style,
+            "index": index,
+            "symbol": json
         }));
     }
+
+throw "So far"
 
     // regenerate the index with different relative links, used in the index pages
     Link.base = "";
@@ -183,8 +198,8 @@ function makeSrcFile(path, destination, name, encoding) {
 
 /** Build output for displaying function parameters. */
 function makeSignature(params) {
-    if (!params) return "()";
-    var signature = "("
+    if (!params) return "";
+    var signature = ""
     +
     params.filter(
         function($) {
@@ -196,7 +211,7 @@ function makeSignature(params) {
         }
     ).join(", ")
     +
-    ")";
+    "";
     return signature;
 }
 
@@ -333,3 +348,80 @@ function defined(o) {
         return (o !== undefined);
 }
 
+function append(element) {
+    if (this.indexOf(element) < 0) this.push(element);
+}
+function prepend(element) {
+    if (this.indexOf(element) < 0) this.unshift(element);
+}
+
+function toJSON(symbol) {
+    var data = {};
+    var alias = data.alias = symbol.alias;
+    var isBuiltin = data.isBuiltin = symbol.isBuiltin();
+    var isClass = data.isClass = !(data.isNamespace = symbol.isNamespace);
+    var isFunction = data.isFunction = (!isClass && symbol.is("FUNCTION"));
+    var type = "";
+    if (isBuiltin) type += "Built-In ";
+    if (isClass) type += "Class "
+    else {
+        if (isFunction) type += "Function ";
+        type += "Namespace ";
+    }
+    data.type = type;
+    var extend = symbol.augments;
+    if (extend && extend.length) {
+        extend = data.extend = extend.map(function($) {
+            return Link.toSymbol($);
+        });
+        data.extendString = extend.join(", ");
+    }
+    data.description = resolveLinks(symbol.classDesc);
+    if (!isBuiltin) data.defined = Link().toSrc(symbol.srcFile);
+    var isPrivate = data.isPrivate = symbol.isPrivate;
+    var isInner = data.isInner = symbol.isInner;
+    var isHighlighted = data.isHighlighted = !!symbol.comment.getTag("hilited").length;
+    if (!symbol.isBuiltin() && (symbol.isNamespace || symbol.is("CONSTRUCTOR"))) {
+        var constructor = data.constructor = {};
+        constructor.link = Link().toSymbol(alias).inner("constructor");
+        if (isClass) {
+            var params = classConstructor.params = symbol.params;
+            constructor.paramsString = makeSignature(params);
+            constructor.isPrivate = isPrivate;
+            constructor.isInner = isInner;
+            constructor.type = type;
+            constructor.isHighlighted = isHighlighted;
+            constructor.decsription = resolveLinks(summarize(symbol.desc));
+        }
+    }
+    var properties = symbol.properties, l = properties.length;
+    var ownProperties = [], propertyContributers = [], contributers = {};
+    while (l--) {
+        var property = properties[l];
+        var memberOf = property.memberOf;
+        if (memberOf == alias && !property.isNamespace) { // own
+            prepend.call(ownProperties, {
+                "name": property.name,
+                "isPrivate": property.isPrivate,
+                "isInner": property.isInner,
+                "isStatic": property.isStatic,
+                "isConstant": property.isConstant,
+                "memberOf": (property.isStatic && memberOf != GLOBAL)
+                    ? property.memberOf : null,
+                "link": Link().toSymbol(alias).withText(property.name),
+                "description": resolveLinks(summarize(property.desc))
+            })
+        } else if (memberOf != alias) { // inhereted
+            var contributer = contributers[memberOf] || propertyContributers(push(contributers[memberOf] = {}));
+            var contributerProperties = contributer.properties;
+            if (!contributerProperties) {
+                var contributerProperties = contributer.properties = [];
+                contributer.link = Link().toSymbol(memberOf);
+            }
+            contributerProperties.push(Link().toSymbol(property.alias).withText(property.name));
+        }
+    }
+    if (ownProperties.length) data.ownProperties = ownProperties;
+    if (propertyContributers.length) data.propertyContributers = propertyContributers;
+    return data;
+}
