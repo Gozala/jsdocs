@@ -6,7 +6,7 @@ var GLOBAL = "_global_";
 
 var type = exports.type = function type(symbol, data) {
     data = data || {};
-    var alias = data.alias = symbol.alias;
+    var alias = data.alias = symbol.alias.toString();
     var isBuiltin = data.isBuiltin = symbol.isBuiltin();
     var isClass = data.isClass = !(data.isNamespace = symbol.isNamespace);
     var isFunction = data.isFunction = (!isClass && symbol.is("FUNCTION"));
@@ -38,7 +38,7 @@ var extend = exports.extend = function extend(symbol, data) {
 }
 var constructor = exports.constructor = function constructor(symbol, data) {
     data = data || {};
-    var alias = symbol.alias;
+    var alias = symbol.alias.toString();
     var isBuiltin = symbol.isBuiltin();
     var isClass = !symbol.isNamespace;
     var isFunction = (!isClass && symbol.is("FUNCTION"));
@@ -62,17 +62,18 @@ var constructor = exports.constructor = function constructor(symbol, data) {
     return data;
 }
 var params = exports.params = function params(symbol) {
-    return symbol.map(function(param) {
-        return {
-            type: {
-                name: param.type,
-                link: Link().toSymbol(param.type)
-            },
-            name: param.name,
-            isOptional: params.isOptional,
-            defaultValue: param.defaultValue,
-            description: params.desc
+    return symbol.map(function(symbol) {
+        var param = {};
+        var type = symbol.type;
+        if (type) param.type = {
+            name: type.toString(),
+            link: Link().toSymbol(type)
         };
+        param.name = symbol.name;
+        param.isOptional = symbol.isOptional;
+        if (symbol.defaultValue) param.defaultValue = symbol.defaultValue;
+        param.description = symbol.desc;
+        return param;
     });
 }
 var properties = exports.properties = function properties(symbol, data) {
@@ -87,8 +88,8 @@ var events = exports.events = function events(symbol, data) {
 
 var member = exports.member = function member(symbol, data) {
     data = data || {};
-    var name = data.name = symbol.name;
-    var alias = data.alias = symbol.alias;
+    var name = data.name = symbol.name.toString();
+    var alias = data.alias = symbol.alias.toString();
     data.isPrivate = symbol.isPrivate;
     data.isInner = symbol.isInner;
     var isStatic = data.isStatic = symbol.isStatic;
@@ -107,8 +108,10 @@ var member = exports.member = function member(symbol, data) {
     if (symbol.author) data.author = symbol.author;
     if (symbol.deprecated) data.deprecated = UTILS.resolveLinks(symbol.deprecated);
     if (symbol.since) data.since = symbol.since;
-    if (symbol.example) data.examples = symbol.example;
-    if (symbol.see) data.see = symbol.see.map(function(see) {
+    var examples = symbol.example;
+    if (examples && examples.length) data.examples = examples;
+    var see = symbol.see;
+    if (see && see.length) data.see = see.map(function(see) {
         return Link().toSymbol(see)
     })
     return data;
@@ -121,33 +124,35 @@ var propertiesMember = exports.propertiesMember = function propertiesMember(symb
 var methodsMember = exports.methodsMember = function methodsMember(symbol, data) {
     data = member(symbol, data || {});
     var params = symbol.params;
-    if (params) {
+    if (params && params.length) {
         data.params = exports.params(params);
         data.paramsString = UTILS.makeSignature(params);
     }
     var exceptions = symbol.exceptions;
-    if (exceptions) data.exceptions = exceptions.map(function(exception) {
-        return {
-            name: exception.name,
-            type: {
-                name: exception.type,
-                link: Link().toSymbol(exception.type)
-            },
+    if (exceptions && exceptions.length) data.exceptions = exceptions.map(function(symbol) {
+        var exception = {
+            name: symbol.name.toString(),
             description: UTILS.resolveLinks(exception.desc)
         };
+        var type = symbol.type;
+        if (type) exception.type = {
+            name: type,
+            link: Link().toSymbol(type)
+        };
+        return exception;
     })
     var returns = symbol.returns;
-    if (returns) data.returns = returns.map(function(returns) {
-        return {
-            type: {
-                name: returns.type,
-                link: Link().toSymbol(returns.type)
-            },
-            description: UTILS.resolveLinks(returns.desc)
+    if (returns && returns.length) data.returns = returns.map(function(symbol) {
+        var returns = { description: UTILS.resolveLinks(symbol.desc) };
+        var type = symbol.type;
+        if (type) returns.type = {
+            name: type,
+            link: Link().toSymbol(type)
         };
+        return returns;
     })
     var requires = symbol.requires;
-    if (requires) data.requires = requires.map(function(requires) {
+    if (requires && requires.length) data.requires = requires.map(function(requires) {
         return UTILS.resolveLinks(requires);
     });
     return data;
@@ -156,12 +161,12 @@ var method = exports.method = methodsMember;
 var eventsMember = methodsMember;
 var members = exports.members = function members(type, symbol, data) {
     data = data || {};
-    var alias = symbol.alias;
+    var alias = symbol.alias.toString();
     var members = symbol[type], l = members.length;
     var own = [], memberContributers = [], contributers = {};
     while (l--) {
         var member = members[l];
-        var memberOf = member.memberOf;
+        var memberOf = member.memberOf.toString();
         if (memberOf == alias && !member.isNamespace) { // own
             var src = (symbol.srcFile != member.srcFile) ? member.srcFile : null;
             member = exports[type + "Member"](member)
@@ -176,8 +181,8 @@ var members = exports.members = function members(type, symbol, data) {
             }
             contributer[type].push({
                 link: Link().toSymbol(member.alias).withText(member.name),
-                name: member.name,
-                alias: memeber.alias
+                name: member.name.toString(),
+                alias: memeber.alias.toString()
             });
         }
     }

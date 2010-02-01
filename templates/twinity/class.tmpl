@@ -4,14 +4,15 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset={encoding}" />
         <meta name="generator" content="JsDoc Toolkit" />
-        {# Link.base = "../"; /* all generated links will be relative to this */ !}
         <title>JsDoc Reference - {symbol.alias}</title>
         <style type="text/css">
         {style}
         </style>
     </head>
     <body>
+        <!-- ============================== header ================================= -->
         {header}
+        <!-- ============================== index ================================= -->
         <div id="index">{index}</div>
         {.section symbol}
         <div id="content">
@@ -48,8 +49,7 @@
                         </td>
                         <td class="nameDescription" {.section isHighlighted}style="color: red;"{.end}>
                             <div class="fixedFont">
-                                <b>{link}</b>
-                                {.section paramsString}({@}){.end}
+                                <b>{link}</b>({.section paramsString}{@}{.end})
                             </div>
                             <div class="description">{description}</div>
                         </td>
@@ -80,8 +80,7 @@
                         </td>
                         <td class="nameDescription">
                             <div class="fixedFont">
-                                {.section memberOf}{@}{.end}
-                                <b>{link}</b>
+                                {.section memberOf}{@}.{.end}<b>{link}</b>
                             </div>
                             <div class="description">{description}</div>
                         </td>
@@ -121,9 +120,7 @@
                         </td>
                         <td class="nameDescription">
                             <div class="fixedFont">
-                                {.section memberOf}{@}{.end}
-                                <b>{link}</b>
-                                {.section paramsString}({@}){.end}
+                                {.section memberOf}{@}.{.end}<b>{link}</b>({.section paramsString}{@}{.end})
                             </div>
                             <div class="description">{description}</div>
                         </td>
@@ -163,9 +160,7 @@
                         </td>
                         <td class="nameDescription">
                             <div class="fixedFont">
-                                {.section memberOf}{@}{.end}
-                                <b>{link}</b>
-                                {.section paramsString}({@}){.end}
+                                {.section memberOf}{@}.{.end}<b>{link}</b>({.section paramsString}{@}{.end})
                             </div>
                             <div class="description">{description}</div>
                         </td>
@@ -193,7 +188,7 @@
                 <div class="fixedFont">
                     {.section isPrivate}&lt;private&gt; {.end}
                     {.section isInner}&lt;inner&gt; {.end}
-                    <b>{alias}</b>{.section paramsString}{@}{.end}
+                    <b>{alias}</b>({.section paramsString}{@}{.end})
                 </div>
                 <div class="description">
                     {description}
@@ -209,7 +204,7 @@
                     <dt class="heading">Parameters:</dt>
                     {.repeated section @}
                     <dt>
-                        {.section type}<span class="light fixedFont">{link}</span> : </span>{.end}
+                        {.section type}<span class="light fixedFont">{link}</span> : {.end}
                         <b>{name}</b>
                         {.section isOptional}<i>Optional</i>{.end}
                         {.section defaultValue}<i>, Default: {@}</i>{.end}
@@ -284,8 +279,7 @@
                 {.section isStatic}&lt;static&gt; {.end}
                 {.section isConstant}&lt;constant&gt; {.end}
                 {.section type}<span class="light">{link}</span>{.end}
-                {.section memberOf}<span class="light">{@}.</span>{.end}
-                <b>{name}</b>
+                {.section memberOf}<span class="light">{@}.</span>{.end}<b>{name}</b>
             </div>
             <div class="description">
                 {description}
@@ -334,207 +328,206 @@
             {.end}
             {.end}
             <!-- ============================== method details ========================= -->
-            <if test="defined(ownMethods) && ownMethods.length">
-                <div class="sectionTitle">
-                    Method Detail
-                </div>
-                <for each="member" in="ownMethods">
-                    <a name="{+Link.symbolNameToLinkName(member)+}"> </a>
-                    <div class="fixedFont">{!
-                        if (member.isPrivate) output += "&lt;private&gt; ";
-                        if (member.isInner) output += "&lt;inner&gt; ";
-                        if (member.isStatic) output += "&lt;static&gt; ";
-                    !}
+            {.section methods}
+            {.section own}
+            <div class="sectionTitle">Method Detail</div>
+            {.repeated section @}
+            <a name="{linkName}"> </a>
+            <div class="fixedFont">
+                {.section isPrivate}&lt;private&gt; {.end}
+                {.section isInner}&lt;inner&gt; {.end}
+                {.section isStatic}&lt;static&gt; {.end}
 
-                    <if test="member.type"><span class="light">{{+new Link().toSymbol(member.type)+}}</span></if>
-                    <if test="member.isStatic && member.memberOf != '_global_'"><span class="light">{+member.memberOf+}.</span></if><b>{+member.name.replace(/\^\d+$/, '')+}</b>{+makeSignature(member.params)+}
-
-                    </div>
-                    <div class="description">
-                        {+resolveLinks(member.desc)+}
-                        <if test="member.srcFile != data.srcFile">
-                            <br />
-                            <i>Defined in: </i> {+new Link().toSrc(member.srcFile)+}.
-                        </if>
-                        <if test="member.author"><br /><i>Author: </i>{+member.author+}.</if>
-                    </div>
-
-                    <if test="member.example.length">
-                    <for each="example" in="member.example">
-                    <pre class="code">{+example+}</pre>
-                    </for>
-                    </if>
-
-                        <if test="member.params.length">
-                            <dl class="detailList">
-                            <dt class="heading">Parameters:</dt>
-                            <for each="item" in="member.params">
-                                <dt>
-                                    {+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}<b>{+item.name+}</b>
-                                    <if test="item.isOptional"><i>Optional<if test="item.defaultValue">, Default: {+item.defaultValue+}</if></i></if>
-                                </dt>
-                                <dd>{+resolveLinks(item.desc)+}</dd>
-                            </for>
-                            </dl>
-                        </if>
-                        <if test="member.deprecated">
-                            <dl class="detailList">
-                            <dt class="heading">Deprecated:</dt>
-                            <dt>
-                                {+ resolveLinks(member.deprecated) +}
-                            </dt>
-                            </dl>
-                        </if>
-                        <if test="member.since">
-                            <dl class="detailList">
-                            <dt class="heading">Since:</dt>
-                                <dd>{+ member.since +}</dd>
-                            </dl>
-                            </dl>
-                        </if>
-                        <if test="member.exceptions.length">
-                            <dl class="detailList">
-                            <dt class="heading">Throws:</dt>
-                            <for each="item" in="member.exceptions">
-                                <dt>
-                                    {+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+} <b>{+item.name+}</b>
-                                </dt>
-                                <dd>{+resolveLinks(item.desc)+}</dd>
-                            </for>
-                            </dl>
-                        </if>
-                        <if test="member.returns.length">
-                            <dl class="detailList">
-                            <dt class="heading">Returns:</dt>
-                            <for each="item" in="member.returns">
-                                <dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+}</dd>
-                            </for>
-                            </dl>
-                        </if>
-                        <if test="member.requires.length">
-                            <dl class="detailList">
-                            <dt class="heading">Requires:</dt>
-                            <for each="item" in="member.requires">
-                                <dd>{+ resolveLinks(item) +}</dd>
-                            </for>
-                            </dl>
-                        </if>
-                        <if test="member.see.length">
-                            <dl class="detailList">
-                            <dt class="heading">See:</dt>
-                            <for each="item" in="member.see">
-                                <dd>{+ new Link().toSymbol(item) +}</dd>
-                            </for>
-                            </dl>
-                        </if>
-
-                    <if test="!$member_last"><hr /></if>
-                </for>
-            </if>
-
-<!-- ============================== event details ========================= -->
-            <if test="defined(ownEvents) && ownEvents.length">
-                <div class="sectionTitle">
-                    Event Detail
-                </div>
-                <for each="member" in="ownEvents">
-                    <a name="event:{+Link.symbolNameToLinkName(member)+}"> </a>
-                    <div class="fixedFont">{!
-                        if (member.isPrivate) output += "&lt;private&gt; ";
-                        if (member.isInner) output += "&lt;inner&gt; ";
-                        if (member.isStatic) output += "&lt;static&gt; ";
-                    !}
-
-                    <if test="member.type"><span class="light">{{+new Link().toSymbol(member.type)+}}</span></if>
-                    <if test="member.isStatic && member.memberOf != '_global_'"><span class="light">{+member.memberOf+}.</span></if><b>{+member.name+}</b>{+makeSignature(member.params)+}
-
-                    </div>
-                    <div class="description">
-                        {+resolveLinks(member.desc)+}
-                        <if test="member.srcFile != data.srcFile">
-                            <br />
-                            <i>Defined in: </i> {+new Link().toSrc(member.srcFile)+}.
-                        </if>
-                        <if test="member.author"><br /><i>Author: </i>{+member.author+}.</if>
-                    </div>
-
-                    <if test="member.example.length">
-                    <for each="example" in="member.example">
-                    <pre class="code">{+example+}</pre>
-                    </for>
-                    </if>
-
-                        <if test="member.params.length">
-                            <dl class="detailList">
-                            <dt class="heading">Parameters:</dt>
-                            <for each="item" in="member.params">
-                                <dt>
-                                    {+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}<b>{+item.name+}</b>
-                                    <if test="item.isOptional"><i>Optional<if test="item.defaultValue">, Default: {+item.defaultValue+}</if></i></if>
-                                </dt>
-                                <dd>{+ resolveLinks(item.desc) +}</dd>
-                            </for>
-                            </dl>
-                        </if>
-                        <if test="member.deprecated">
-                            <dl class="detailList">
-                            <dt class="heading">Deprecated:</dt>
-                            <dt>
-                                {+ resolveLinks(member.deprecated) +}
-                            </dt>
-                            </dl>
-                        </if>
-                        <if test="member.since">
-                            <dl class="detailList">
-                            <dt class="heading">Since:</dt>
-                                <dd>{+ member.since +}</dd>
-                            </dl>
-                            </dl>
-                        </if>
-                        <if test="member.exceptions.length">
-                            <dl class="detailList">
-                            <dt class="heading">Throws:</dt>
-                            <for each="item" in="member.exceptions">
-                                <dt>
-                                    {+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+} <b>{+item.name+}</b>
-                                </dt>
-                                <dd>{+ resolveLinks(item.desc) +}</dd>
-                            </for>
-                            </dl>
-                        </if>
-                        <if test="member.returns.length">
-                            <dl class="detailList">
-                            <dt class="heading">Returns:</dt>
-                            <for each="item" in="member.returns">
-                                <dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+}</dd>
-                            </for>
-                            </dl>
-                        </if>
-                        <if test="member.requires.length">
-                            <dl class="detailList">
-                            <dt class="heading">Requires:</dt>
-                            <for each="item" in="member.requires">
-                                <dd>{+ resolveLinks(item) +}</dd>
-                            </for>
-                            </dl>
-                        </if>
-                        <if test="member.see.length">
-                            <dl class="detailList">
-                            <dt class="heading">See:</dt>
-                            <for each="item" in="member.see">
-                                <dd>{+ new Link().toSymbol(item) +}</dd>
-                            </for>
-                            </dl>
-                        </if>
-
-                    <if test="!$member_last"><hr /></if>
-                </for>
-            </if>
-
+                {.section type}<span class="light">{link}</span>{.end}
+                {.section memberOf}<span class="light">{@}.</span>{.end}<b>{name}</b>({.section paramsString}{@}{.end})
+            </div>
+            <div class="description">
+                {description}
+                {.section src}
+                <br/>
+                <i>Defined in: </i> {link}.
+                {.end}
+                {.section author}
+                <br/>
+                <i>Author: </i>{author}.
+                {.end}
+            </div>
+            {.section examples}
+            {.repeated section @}
+            <pre class="code">{@}</pre>
+            {.end}
+            {.end}
+            {.section params}
+            <dl class="detailList">
+                <dt class="heading">Parameters:</dt>
+                {.repeated section @}
+                <dt>{.section type}<span class="light fixedFont">{link}</span> : {.end}
+                    <b>{name}</b>
+                    {.section isOptional}<i>Optional</i>{.end}
+                    {.section defaultValue}<i>, Default: {@}</i>{.end}
+                </dt>
+                <dd>{description}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section deprecated}
+            <dl class="detailList">
+                <dt class="heading">Deprecated:</dt>
+                <dt>{@}</dt>
+            </dl>
+            {.end}
+            {.section since}
+            <dl class="detailList">
+                <dt class="heading">Since:</dt>
+                <dd>{@}</dd>
+            </dl>
+            {.end}
+            {.section exceptions}
+            <dl class="detailList">
+                <dt class="heading">Throws:</dt>
+                {.repeated section @}
+                <dt>
+                    {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                    <b>{name}</b>
+                </dt>
+                <dd>{description}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section returns}
+            <dl class="detailList">
+                <dt class="heading">Returns:</dt>
+                {.repeated section @}
+                <dt>
+                    {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                    <b>{name}</b>
+                </dt>
+                <dd>{description}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section requires}
+            <dl class="detailList">
+                <dt class="heading">Requires:</dt>
+                {.repeated section @}
+                <dd>{@}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section see}
+            <dl class="detailList">
+                <dt class="heading">See:</dt>
+                {.repeated section @}
+                <dd>{@}</dd>
+                {.end}
+            </dl>
+            {.end}
             <hr />
+            {.end}
+            {.end}
+            {.end}
+            <!-- ============================== event details ========================= -->
+            {.section events}
+            {.section own}
+            <div class="sectionTitle">Event Detail</div>
+            {.repeated section @}
+            <a name="{linkName}"> </a>
+            <div class="fixedFont">
+                {.section isPrivate}&lt;private&gt; {.end}
+                {.section isInner}&lt;inner&gt; {.end}
+                {.section isStatic}&lt;static&gt; {.end}
+
+                {.section type}<span class="light">{link}</span>{.end}
+                {.section memberOf}<span class="light">{@}.</span>{.end}<b>{name}</b>({.section paramsString}{@}{.end})
+            </div>
+            <div class="description">
+                {description}
+                {.section src}
+                <br/>
+                <i>Defined in: </i> {link}.
+                {.end}
+                {.section author}
+                <br/>
+                <i>Author: </i>{author}.
+                {.end}
+            </div>
+            {.section examples}
+            {.repeated section @}
+            <pre class="code">{@}</pre>
+            {.end}
+            {.end}
+            {.section params}
+            <dl class="detailList">
+                <dt class="heading">Parameters:</dt>
+                {.repeated section @}
+                <dt>{.section type}<span class="light fixedFont">{link}</span> : {.end}
+                    <b>{name}</b>
+                    {.section isOptional}<i>Optional</i>{.end}
+                    {.section defaultValue}<i>, Default: {@}</i>{.end}
+                </dt>
+                <dd>{description}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section deprecated}
+            <dl class="detailList">
+                <dt class="heading">Deprecated:</dt>
+                <dt>{@}</dt>
+            </dl>
+            {.end}
+            {.section since}
+            <dl class="detailList">
+                <dt class="heading">Since:</dt>
+                <dd>{@}</dd>
+            </dl>
+            {.end}
+            {.section exceptions}
+            <dl class="detailList">
+                <dt class="heading">Throws:</dt>
+                {.repeated section @}
+                <dt>
+                    {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                    <b>{name}</b>
+                </dt>
+                <dd>{description}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section returns}
+            <dl class="detailList">
+                <dt class="heading">Returns:</dt>
+                {.repeated section @}
+                <dt>
+                    {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                    <b>{name}</b>
+                </dt>
+                <dd>{description}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section requires}
+            <dl class="detailList">
+                <dt class="heading">Requires:</dt>
+                {.repeated section @}
+                <dd>{@}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section see}
+            <dl class="detailList">
+                <dt class="heading">See:</dt>
+                {.repeated section @}
+                <dd>{@}</dd>
+                {.end}
+            </dl>
+            {.end}
+            <hr />
+            {.end}
+            {.end}
+            {.end}
         </div>
         {.end}
-<!-- ============================== footer ================================= -->
+        <!-- ============================== footer ================================= -->
         {footer}
     </body>
 </html>
