@@ -273,74 +273,67 @@
             </div>
             {.end}
             <!-- ============================== field details ========================== -->
-            <if test="defined(ownProperties) && ownProperties.length">
-                <div class="sectionTitle">
-                    Field Detail
-                </div>
-                <for each="member" in="ownProperties">
-                    <a name="{+Link.symbolNameToLinkName(member)+}"> </a>
-                    <div class="fixedFont">{!
-                        if (member.isPrivate) output += "&lt;private&gt; ";
-                        if (member.isInner) output += "&lt;inner&gt; ";
-                        if (member.isStatic) output += "&lt;static&gt; ";
-                        if (member.isConstant) output += "&lt;constant&gt; ";
-                    !}
-
-                    <if test="member.type"><span class="light">{{+new Link().toSymbol(member.type)+}}</span></if>
-                    <if test="member.isStatic && member.memberOf != '_global_'"><span class="light">{+member.memberOf+}.</span></if><b>{+member.name+}</b>
-
-                    </div>
-                    <div class="description">
-                        {+resolveLinks(member.desc)+}
-                        <if test="member.srcFile != data.srcFile">
-                            <br />
-                            <i>Defined in: </i> {+new Link().toSrc(member.srcFile)+}.
-                        </if>
-                        <if test="member.author"><br /><i>Author: </i>{+member.author+}.</if>
-                    </div>
-
-                    <if test="member.example.length">
-                    <for each="example" in="member.example">
-                    <pre class="code">{+example+}</pre>
-                    </for>
-                    </if>
-
-                        <if test="member.deprecated">
-                            <dl class="detailList">
-                            <dt class="heading">Deprecated:</dt>
-                            <dt>
-                                {+ resolveLinks(member.deprecated) +}
-                            </dt>
-                            </dl>
-                        </if>
-                        <if test="member.since">
-                            <dl class="detailList">
-                            <dt class="heading">Since:</dt>
-                                <dd>{+ member.since +}</dd>
-                            </dl>
-                        </if>
-                        <if test="member.see.length">
-                            <dl class="detailList">
-                            <dt class="heading">See:</dt>
-                            <for each="item" in="member.see">
-                            <dd>{+ new Link().toSymbol(item) +}</dd>
-                            </for>
-                            </dl>
-                        </if>
-                        <if test="member.defaultValue">
-                            <dl class="detailList">
-                            <dt class="heading">Default Value:</dt>
-                            <dd>
-                                {+resolveLinks(member.defaultValue)+}
-                            </dd>
-                            </dl>
-                        </if>
-
-                    <if test="!$member_last"><hr /></if>
-                </for>
-            </if>
-
-<!-- ============================== method details ========================= -->
+            {.section properties}
+            {.section own}
+            <div class="sectionTitle">Field Detail</div>
+            {.repeated section @}
+            <a name="{linkName}"> </a>
+            <div class="fixedFont">
+                {.section isPrivate}&lt;private&gt; {.end}
+                {.section isInner}&lt;inner&gt; {.end}
+                {.section isStatic}&lt;static&gt; {.end}
+                {.section isConstant}&lt;constant&gt; {.end}
+                {.section type}<span class="light">{link}</span>{.end}
+                {.section memberOf}<span class="light">{@}.</span>{.end}
+                <b>{name}</b>
+            </div>
+            <div class="description">
+                {description}
+                {.section src}
+                <br/>
+                <i>Defined in: </i> {link}.
+                {.end}
+                {.section author}
+                <br/>
+                <i>Author: </i>{author}.
+                {.end}
+            </div>
+            {.section examples}
+            {.repeated section @}
+            <pre class="code">{@}</pre>
+            {.end}
+            {.end}
+            {.section deprecated}
+            <dl class="detailList">
+                <dt class="heading">Deprecated:</dt>
+                <dt>{@}</dt>
+            </dl>
+            {.end}
+            {.section since}
+            <dl class="detailList">
+                <dt class="heading">Since:</dt>
+                <dd>{@}</dd>
+            </dl>
+            {.end}
+            {.section see}
+            <dl class="detailList">
+                <dt class="heading">See:</dt>
+                {.repeated section @}
+                <dd>{@}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section defaultValue}
+            <dl class="detailList">
+                <dt class="heading">Default Value:</dt>
+                <dd>{@}</dd>
+            </dl>
+            {.end}
+            <hr />
+            {.end}
+            {.end}
+            {.end}
+            <!-- ============================== method details ========================= -->
             <if test="defined(ownMethods) && ownMethods.length">
                 <div class="sectionTitle">
                     Method Detail

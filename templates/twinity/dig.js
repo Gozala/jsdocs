@@ -96,11 +96,14 @@ var member = exports.member = function member(symbol, data) {
     data.memberOf = (isStatic && memberOf != GLOBAL) ? memberOf : null;
     data.description = UTILS.resolveLinks(UTILS.summarize(symbol.desc));
     data.link = Link().toSymbol(alias).withText(name.replace(/\^\d+$/, ''));
+    data.linkName = Link.symbolNameToLinkName(symbol);
     var type = symbol.type;
     if (type) {
         data.type = type;
         data.typeLink = Link().toSymbol(type);
     }
+    data.isOptional = symbol.isOptional;
+    if (symbol.defaultValue) data.defaultValue = symbol.defaultValue;
     if (symbol.author) data.author = symbol.author;
     if (symbol.deprecated) data.deprecated = UTILS.resolveLinks(symbol.deprecated);
     if (symbol.since) data.since = symbol.since;
@@ -160,7 +163,10 @@ var members = exports.members = function members(type, symbol, data) {
         var member = members[l];
         var memberOf = member.memberOf;
         if (memberOf == alias && !member.isNamespace) { // own
-            own.unshift(exports[type + "Member"](member));
+            var src = (symbol.srcFile != member.srcFile) ? member.srcFile : null;
+            member = exports[type + "Member"](member)
+            if (src) member.src = { link: Link().toSrc(src) };
+            own.unshift(member);
         } else if (memberOf != alias) { // inhereted
             var contributer = contributers[memberOf];
             if (!contributer) {
