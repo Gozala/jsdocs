@@ -10,14 +10,14 @@ var type = exports.type = function type(symbol, data) {
     var isBuiltin = data.isBuiltin = symbol.isBuiltin();
     var isClass = data.isClass = !(data.isNamespace = symbol.isNamespace);
     var isFunction = data.isFunction = (!isClass && symbol.is("FUNCTION"));
-    var type = "";
-    if (isBuiltin) type += "Built-In ";
-    if (isClass) type += "Class "
+    var absoluteName = "";
+    if (isBuiltin) absoluteName += "Built-In ";
+    if (isClass) absoluteName += "Class "
     else {
-        if (isFunction) type += "Function ";
-        type += "Namespace ";
+        if (isFunction) absoluteName += "Function ";
+        absoluteName += "Namespace ";
     }
-    data.type = type;
+    data.absoluteName = absoluteName;
     data.description = UTILS.resolveLinks(symbol.classDesc);
     if (!isBuiltin) data.defined = Link().toSrc(symbol.srcFile);
     var isPrivate = data.isPrivate = symbol.isPrivate;
@@ -42,28 +42,38 @@ var constructor = exports.constructor = function constructor(symbol, data) {
     var isBuiltin = symbol.isBuiltin();
     var isClass = !symbol.isNamespace;
     var isFunction = (!isClass && symbol.is("FUNCTION"));
-    var type = "";
-    if (isBuiltin) type += "Built-In ";
-    if (isClass) type += "Class "
+    var absoluteName = "";
+    if (isBuiltin) absoluteName += "Built-In ";
+    if (isClass) absoluteName += "Class "
     else {
-        if (isFunction) type += "Function ";
-        type += "Namespace ";
+        if (isFunction) absoluteName += "Function ";
+        absoluteName += "Namespace ";
     }
     var isHighlighted = data.isHighlighted = !!symbol.comment.getTag("hilited").length;
     if (!isBuiltin && (!isClass || symbol.is("CONSTRUCTOR"))) {
         var constructor = data.classConstructor = {};
-        constructor.link = Link().toSymbol(alias).inner("constructor");
         if (isClass) {
-            var params = constructor.params = symbol.params;
-            constructor.paramsString = UTILS.makeSignature(params);
-            constructor.isPrivate = symbol.isPrivate;
-            constructor.isInner = symbol.isInner;
-            constructor.type = type;
+            constructor.absoluteName = absoluteName;
             constructor.isHighlighted = isHighlighted;
-            constructor.decsription = UTILS.resolveLinks(UTILS.summarize(symbol.desc));
+            method(symbol, constructor);
         }
+        constructor.link = Link().toSymbol(alias).inner("constructor");
     }
     return data;
+}
+var params = exports.params = function params(symbol) {
+    return symbol.map(function(param) {
+        return {
+            type: {
+                name: param.type,
+                link: Link().toSymbol(param.type)
+            },
+            name: param.name,
+            isOptional: params.isOptional,
+            defaultValue: param.defaultValue,
+            description: params.desc
+        };
+    });
 }
 var properties = exports.properties = function properties(symbol, data) {
     return members("properties", symbol, data || {});
@@ -84,8 +94,20 @@ var member = exports.member = function member(symbol, data) {
     var isStatic = data.isStatic = symbol.isStatic;
     var memberOf = symbol.memberOf
     data.memberOf = (isStatic && memberOf != GLOBAL) ? memberOf : null;
-    data.description = UTILS.resolveLinks(UTILS.summarize(member.desc));
+    data.description = UTILS.resolveLinks(UTILS.summarize(symbol.desc));
     data.link = Link().toSymbol(alias).withText(name.replace(/\^\d+$/, ''));
+    var type = symbol.type;
+    if (type) {
+        data.type = type;
+        data.typeLink = Link().toSymbol(type);
+    }
+    if (symbol.author) data.author = symbol.author;
+    if (symbol.deprecated) data.deprecated = UTILS.resolveLinks(symbol.deprecated);
+    if (symbol.since) data.since = symbol.since;
+    if (symbol.example) data.examples = symbol.example;
+    if (symbol.see) data.see = symbol.see.map(function(see) {
+        return Link().toSymbol(see)
+    })
     return data;
 }
 var propertiesMember = exports.propertiesMember = function propertiesMember(symbol, data) {
@@ -97,11 +119,37 @@ var methodsMember = exports.methodsMember = function methodsMember(symbol, data)
     data = member(symbol, data || {});
     var params = symbol.params;
     if (params) {
-        data.params = params;
+        data.params = exports.params(params);
         data.paramsString = UTILS.makeSignature(params);
     }
+    var exceptions = symbol.exceptions;
+    if (exceptions) data.exceptions = exceptions.map(function(exception) {
+        return {
+            name: exception.name,
+            type: {
+                name: exception.type,
+                link: Link().toSymbol(exception.type)
+            },
+            description: UTILS.resolveLinks(exception.desc)
+        };
+    })
+    var returns = symbol.returns;
+    if (returns) data.returns = returns.map(function(returns) {
+        return {
+            type: {
+                name: returns.type,
+                link: Link().toSymbol(returns.type)
+            },
+            description: UTILS.resolveLinks(returns.desc)
+        };
+    })
+    var requires = symbol.requires;
+    if (requires) data.requires = requires.map(function(requires) {
+        return UTILS.resolveLinks(requires);
+    });
     return data;
-}
+};
+var method = exports.method = methodsMember;
 var eventsMember = methodsMember;
 var members = exports.members = function members(type, symbol, data) {
     data = data || {};

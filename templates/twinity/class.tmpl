@@ -15,7 +15,7 @@
         <div id="index">{index}</div>
         {.section symbol}
         <div id="content">
-            <h1 class="classTitle">{type} {alias}</h1>
+            <h1 class="classTitle">{absoluteName} {alias}</h1>
             <!-- ============================== class summary ========================== -->
             <p class="description">
                 {.section version}<br/>Version {@}<br/>{.end}
@@ -32,7 +32,7 @@
             <!-- ============================== constructor summary ==================== -->
             {.section classConstructor}
             <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class {alias}.">
-                <caption>{type} Summary</caption>
+                <caption>{absoluteName} Summary</caption>
                 <thead>
                     <tr>
                         <th scope="col">Constructor Attributes</th>
@@ -184,97 +184,95 @@
             {.end}
             {.end}
             <!-- ============================== constructor details ==================== -->
-            <if test="!data.isBuiltin() && (data.isNamespace || data.is('CONSTRUCTOR'))">
-            <div class="details"><a name="constructor"> </a>
+            {.section classConstructor}
+            <div class="details">
+                <a name="constructor"> </a>
                 <div class="sectionTitle">
-                    {+classType+}Detail
+                    {absoluteName} Detail
                 </div>
-
-                <div class="fixedFont">{!
-                    if (data.isPrivate) output += "&lt;private&gt; ";
-                    if (data.isInner) output += "&lt;inner&gt; ";
-                !}
-                        <b>{+ data.alias +}</b><if test="classType != 'Namespace '">{+ makeSignature(data.params) +}</if>
+                <div class="fixedFont">
+                    {.section isPrivate}&lt;private&gt; {.end}
+                    {.section isInner}&lt;inner&gt; {.end}
+                    <b>{alias}</b>{.section paramsString}{@}{.end}
                 </div>
-
                 <div class="description">
-                    {+resolveLinks(data.desc)+}
-                    <if test="data.author"><br /><i>Author: </i>{+data.author+}.</if>
+                    {description}
+                    {.section author}<br/><i>Author: </i>{author}.{.end}
                 </div>
-
-                <if test="data.example.length">
-                <for each="example" in="data.example">
-                <pre class="code">{+example+}</pre>
-                </for>
-                </if>
-
-
-                    <if test="data.params.length">
-                        <dl class="detailList">
-                        <dt class="heading">Parameters:</dt>
-                        <for each="item" in="data.params">
-                            <dt>
-                                {+((item.type)?""+("<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type)+"}</span> ")) : "")+} <b>{+item.name+}</b>
-                                <if test="item.isOptional"><i>Optional<if test="item.defaultValue">, Default: {+item.defaultValue+}</if></i></if>
-                            </dt>
-                                <dd>{+resolveLinks(item.desc)+}</dd>
-                        </for>
-                        </dl>
-                    </if>
-                    <if test="data.deprecated">
-                        <dl class="detailList">
-                        <dt class="heading">Deprecated:</dt>
-                        <dt>
-                            {+resolveLinks(data.deprecated)+}
-                        </dt>
-                        </dl>
-                    </if>
-                    <if test="data.since">
-                        <dl class="detailList">
-                        <dt class="heading">Since:</dt>
-                            <dd>{+ data.since +}</dd>
-                        </dl>
-                    </if>
-                    <if test="data.exceptions.length">
-                        <dl class="detailList">
-                        <dt class="heading">Throws:</dt>
-                        <for each="item" in="data.exceptions">
-                            <dt>
-                                {+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+} <b>{+item.name+}</b>
-                            </dt>
-                                <dd>{+resolveLinks(item.desc)+}</dd>
-                        </for>
-                        </dl>
-                    </if>
-                    <if test="data.returns.length">
-                        <dl class="detailList">
-                        <dt class="heading">Returns:</dt>
-                        <for each="item" in="data.returns">
-                                <dd>{+((item.type)?"<span class=\"light fixedFont\">{"+(new Link().toSymbol(item.type))+"}</span> " : "")+}{+resolveLinks(item.desc)+}</dd>
-                        </for>
-                        </dl>
-                    </if>
-                    <if test="data.requires.length">
-                        <dl class="detailList">
-                        <dt class="heading">Requires:</dt>
-                        <for each="item" in="data.requires">
-                            <dd>{+ resolveLinks(item) +}</dd>
-                        </for>
-                        </dl>
-                    </if>
-                    <if test="data.see.length">
-                        <dl class="detailList">
-                        <dt class="heading">See:</dt>
-                        <for each="item" in="data.see">
-                            <dd>{+ new Link().toSymbol(item) +}</dd>
-                        </for>
-                        </dl>
-                    </if>
-
+                {.section examples}
+                {.repeated section @}
+                <pre class="code">{@}</pre>
+                {.end}
+                {.end}
+                {.section params}
+                <dl class="detailList">
+                    <dt class="heading">Parameters:</dt>
+                    {.repeated section @}
+                    <dt>
+                        {.section type}<span class="light fixedFont">{link}</span> : </span>{.end}
+                        <b>{name}</b>
+                        {.section isOptional}<i>Optional</i>{.end}
+                        {.section defaultValue}<i>, Default: {@}</i>{.end}
+                    </dt>
+                    <dd>{description}</dd>
+                    {.end}
+                </dl>
+                {.end}
+                {.section deprecated}
+                <dl class="detailList">
+                    <dt class="heading">Deprecated:</dt>
+                    <dt>{@}</dt>
+                </dl>
+                {.end}
+                {.section since}
+                <dl class="detailList">
+                    <dt class="heading">Since:</dt>
+                    <dd>{@}</dd>
+                </dl>
+                {.end}
+                {.section exceptions}
+                <dl class="detailList">
+                    <dt class="heading">Throws:</dt>
+                    {.repeated section @}
+                    <dt>
+                        {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                        <b>{name}</b>
+                    </dt>
+                    <dd>{description}</dd>
+                    {.end}
+                </dl>
+                {.end}
+                {.section returns}
+                <dl class="detailList">
+                    <dt class="heading">Returns:</dt>
+                    {.repeated section @}
+                    <dt>
+                        {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                        <b>{name}</b>
+                    </dt>
+                    <dd>{description}</dd>
+                    {.end}
+                </dl>
+                {.end}
+                {.section requires}
+                <dl class="detailList">
+                    <dt class="heading">Requires:</dt>
+                    {.repeated section @}
+                    <dd>{@}</dd>
+                    {.end}
+                </dl>
+                {.end}
+                {.section see}
+                <dl class="detailList">
+                    <dt class="heading">See:</dt>
+                    {.repeated section @}
+                    <dd>{@}</dd>
+                    {.end}
+                </dl>
+                {.end}
             </div>
-            </if>
-
-<!-- ============================== field details ========================== -->
+            {.end}
+            <!-- ============================== field details ========================== -->
             <if test="defined(ownProperties) && ownProperties.length">
                 <div class="sectionTitle">
                     Field Detail
