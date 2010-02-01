@@ -26,13 +26,6 @@ exports.publish = function publish(symbolSet, options) {
     
     var destination = options.destination;
 
-    // is source output is suppressed, just display the links to the source file
-    if (options.includeSource && Link !== undefined && Link.prototype._makeSrcLink) {
-        Link.prototype._makeSrcLink = function(srcFilePath) {
-            return "&lt;" + srcFilePath + "&gt;";
-        }
-    }
-
     // create the folders and subfolders to hold the output
     var symbols = Link.symbolsDir = destination.join("symbols");
     var dirs = Link.srcDir = symbols.join("src");
@@ -52,12 +45,24 @@ exports.publish = function publish(symbolSet, options) {
 
     // get an array version of the symbolset, useful for filtering
     var symbols = symbolSet.toArray();
-
+    var sources = destination.join("symbols", "src");
     // create the hilited source code files
     var files = options.files;
     if (options.includeSource) {
         for (var i = 0, l = files.length; i < l; i++) {
-            UTILS.makeSrcFile(files[i], destination.join("symbols", "src"), null, options.encoding);
+            var content, src;
+            var path = files[i];
+            var name = path.toString()
+                .replace(/\.\.?[\\\/]/g, "")
+                .replace(/[\\\/]/g, "_")
+                .replace(/\:/g, "_");
+            plugins.notify("onPublishSrc", (src = {
+                path: path,
+                name: name,
+                charset: encoding,
+                highlighted: null
+            }));
+            if (content = src.highlighted) sources.join(name + extension).write(content);
         }
     }
 
@@ -105,55 +110,79 @@ exports.publish = function publish(symbolSet, options) {
 
         Link.currentSymbol = symbol;
         var name = options.uniqueNames ? Link.filemap[symbol.alias] : symbol.alias;
-        var json = DIG.Class(symbol);
-        print("\n\n" + JSON.stringify(json) + "\n\n");
         destination.join("symbols", name + extension).write(classTemplate.expand({
-            "encoding": encoding,
-            "header": header,
-            "footer": footer,
-            "style": style,
-            "index": index,
-            "symbol": json
+            encoding: encoding,
+            header: header,
+            footer: footer,
+            style: style,
+            index: index,
+            symbol: DIG.Class(symbol)
         }));
     }
-
-throw "So far"
-
     // regenerate the index with different relative links, used in the index pages
     Link.base = "";
     // TODO: don't access this damn Link
-    global.conf.classesIndex = classesTemplate.process(classes);
-
+    index = classesTemplate.expand({ // kept in memory
+        classesLink: classesLink,
+        filesLink: filesLink,
+        items: classes.map(function(item) {
+            var alias = item.alias, link = Link().toClass(alias);
+            return (alias == GLOBAL) ? "<i>" + link + "</i>" : link;
+        })
+    });
     // create the class index page
-    var classesindexTemplate = new JsPlate(template.join("index.tmpl").read().toString(), "index.tmpl");
-    var classesIndex = classesindexTemplate.process(classes);
-    destination.join("index" + conf.extension).write(classesIndex);
-    classesindexTemplate = classesIndex = classes = null;
+    var classesIndex = Template(template.join("index.tmpl").read().toString());
+    destination.join("index" + extension).write(classesIndex.expand({
+        encoding: encoding,
+        style: style,
+        header: header,
+        index: index,
+        footer: footer,
+        classes: classes.map(function(symbol) {
+            return {
+                link: Link().toSymbol(symbol.alias),
+                description: UTILS.resolveLinks(UTILS.summarize(symbol.classDesc))
+            }
+        })
+    }));
 
     // create the file index page
-    var fileindexTemplate = new Template(template.join("allfiles.tmpl").read().toString());
-
+    var filesIndex = Template(template.join("allfiles.tmpl").read().toString());
     var documentedFiles = symbols.filter(isaFile); // files that have file-level docs
     var allFiles = []; // not all files have file-level docs, but we need to list every one
-
     for (var i = 0; i < files.length; i++) {
         allFiles.push(new Symbol(files[i], [], "FILE", new DocComment("/** */")));
     }
-
     for (var i = 0; i < documentedFiles.length; i++) {
         var offset = files.indexOf(documentedFiles[i].alias);
         allFiles[offset] = documentedFiles[i];
     }
-
-    allFiles = allFiles.sort(makeSortby("name"));
+    allFiles = allFiles.sort(UTILS.makeSortby("name"));
 
     // output the file index page
-    var filesIndex = fileindexTemplate.expand({
-        title: new Link().toFile("files.html").withText("File Index"),
-        files: allFiles
-    });
-    destination.join("files" + conf.extension).write(filesIndex);
-    fileindexTemplate = filesIndex = files = null;
+    destination.join("files" + extension).write(filesIndex.expand({
+        encoding: encoding,
+        style: style,
+        header: header,
+        index: index,
+        footer: footer,
+        // title: Link().toFile("files.html").withText("File Index"),
+        files: allFiles.map(function(symbol) {
+            var file = {
+               link: Link().toSrc(symbol.alias).withText(symbol.name)
+            };
+            if (symbol.desc) file.description = symbol.desc;
+            if (symbol.author) file.author = symbol.author;
+            if (symbol.version) file.version = symbol.version;
+            var uris = symbol.comment.getTag('location');
+            if (uris && uris.length) file.uris = uris.map(function(uri) {
+                return uri.toString()
+                    .replace(/(^\$ ?| ?\$$)/g, '')
+                    .replace(/^HeadURL: https:/g, 'http:');
+            });
+            return file;
+        })
+    }));
 }
 
 

@@ -17,23 +17,6 @@ exports.makeSortby = function makeSortby(attribute) {
         }
     }
 };
-/** Turn a raw source file into a code-hilited page in the docs. */
-exports.makeSrcFile = function makeSrcFile(path, destination, name, encoding) {
-    var content, src;
-    if (!name) {
-        name = path.toString()
-            .replace(/\.\.?[\\\/]/g, "")
-            .replace(/[\\\/]/g, "_")
-            .replace(/\:/g, "_");
-    }
-    plugins.notify("onPublishSrc", (src = {
-        path: path,
-        name: name,
-        charset: encoding,
-        highlighted: null
-    }));
-    if (content = src.highlighted) destination.join(name).write(content);
-};
 /** Build output for displaying function parameters. */
 exports.makeSignature = function makeSignature(params) {
     if (!params) return "";
