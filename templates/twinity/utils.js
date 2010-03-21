@@ -1,4 +1,4 @@
-var Link = require("jsdocs/frame/link").Link;
+var Link = require("./link").Link;
 var plugins = require("jsdocs/plugin-manager");
 
 /** Just the first sentence (up to a full stop). Should not break on dotted variable names. */
@@ -30,7 +30,7 @@ exports.makeSignature = function makeSignature(params) {
 /** Find symbol {@link ...} strings in text and turn into html links */
 exports.resolveLinks = function resolveLinks(text, from) {
     return text.replace(/\{@link ([^} ]+) ?\}/gi, function(match, symbolName) {
-        return new Link().toSymbol(symbolName);
+        return Link().toSymbol(symbolName);
     });
 };
 exports.defined = function defined(o) {

@@ -1,4 +1,4 @@
-var Link = require("jsdocs/frame/link").Link;
+var Link = require("./link").Link;
 var UTILS = require("./utils");
 var console = require("system").log;
 
@@ -30,7 +30,7 @@ var extend = exports.extend = function extend(symbol, data) {
     var extend = symbol.augments;
     if (extend && extend.length) {
         extend = data.extend = extend.map(function(ancestor) {
-            return Link.toSymbol(ancestor);
+            return Link().toSymbol(ancestor);
         });
         data.extendString = extend.join(", ");
     }
