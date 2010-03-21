@@ -1,21 +1,26 @@
-/** Called automatically by JsDoc Toolkit. */
+#!/usr/bin/env narwhal
+
 var Link = require("./link").Link;
 var console = require("system").log;
 var plugins = require("jsdocs/plugin-manager");
 var Symbol = require("jsdocs/symbol").Symbol;
 var DocComment = require("jsdocs/doc-comment").DocComment;
-var FILE = require("file");
+var FS = require("file");
 var Template = require("json-template").Template;
 var DIG = require("./dig");
 var UTILS = require("./utils")
+var OPTIONS = require("jsdocs/options");
+var SYSTEM = require("system");
+var JSDOCS = require("jsdocs/js-doc");
+var GLOBAL = "global";
 
-var GLOBAL = "_global_";
-
-exports.publish = function publish(symbolSet, options) {
+exports.main = function main() {
+    var options = OPTIONS.main(SYSTEM.args);
+    var symbolSet = JSDOCS.doc(options);
     var version = "0.1";
     var date = new Date();
     var extension = Link.ext = ".html" || options.extension;
-    var template = options.template;
+    var template = FS.path(module.path).join("..");
     var encoding = "utf-8" || options.encoding;
     var style = template.join("static", "default.css").read().toString();
     var header = template.join("static", "header.html").read().toString();
@@ -23,7 +28,7 @@ exports.publish = function publish(symbolSet, options) {
         version: version,
         date: date
     });
-    
+
     var destination = options.destination;
 
     // create the folders and subfolders to hold the output
@@ -34,7 +39,7 @@ exports.publish = function publish(symbolSet, options) {
     // used to allow Link to check the details of things being linked to
     Link.symbolSet = symbolSet;
 
-    // create the required templates    
+    // create the required templates
     var classTemplate = Template(template.join("class.tmpl").read().toString());
     var classesTemplate = Template(template.join("allclasses.tmpl").read().toString());
 
@@ -89,7 +94,7 @@ exports.publish = function publish(symbolSet, options) {
     Link.base = "../";
     var classesLink = Link().toFile("index.html").withText("Class Index");
     var filesLink = Link().toFile("files.html").withText("File Index");
-    
+
     var index = classesTemplate.expand({ // kept in memory
         classesLink: classesLink,
         filesLink: filesLink,
@@ -182,4 +187,4 @@ exports.publish = function publish(symbolSet, options) {
     }));
 }
 
-
+if (require.main == module) exports.main();
