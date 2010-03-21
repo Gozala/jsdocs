@@ -1,6 +1,6 @@
 /** Called automatically by JsDoc Toolkit. */
-var Link = require("jsdocs/frame/link").Link;
-var JsPlate = require("jsdocs/js-plate").JsPlate;
+var Link = require("./link").Link;
+var JsPlate = require("./js-plate").JsPlate;
 var console = require("system").log;
 var OS = require("os");
 var plugins = require("jsdocs/plugin-manager");
@@ -193,10 +193,6 @@ function makeSignature(params) {
 }
 
 
-/**
-    @constructor
-*/
-var Link = require("jsdocs/frame/link").Link;
 
 // TODO: fix this global dependencies
 var encoding, VERSION, copyright;
@@ -322,6 +318,6 @@ function resolveLinks(str, from) {
 }
 
 function defined(o) {
-        return (o !== undefined);
+    return (o !== undefined);
 }
 

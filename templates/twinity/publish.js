@@ -1,5 +1,5 @@
 /** Called automatically by JsDoc Toolkit. */
-var Link = require("jsdocs/frame/link").Link;
+var Link = require("./link").Link;
 var console = require("system").log;
 var plugins = require("jsdocs/plugin-manager");
 var Symbol = require("jsdocs/symbol").Symbol;
@@ -28,8 +28,8 @@ exports.publish = function publish(symbolSet, options) {
 
     // create the folders and subfolders to hold the output
     var symbols = Link.symbolsDir = destination.join("symbols");
-    var dirs = Link.srcDir = symbols.join("src");
-    if (!dirs.exists()) dirs.mkdirs();
+    var sources = Link.srcDir = symbols.join("src");
+    if (!sources.exists()) sources.mkdirs();
 
     // used to allow Link to check the details of things being linked to
     Link.symbolSet = symbolSet;
@@ -45,7 +45,6 @@ exports.publish = function publish(symbolSet, options) {
 
     // get an array version of the symbolset, useful for filtering
     var symbols = symbolSet.toArray();
-    var sources = destination.join("symbols", "src");
     // create the hilited source code files
     var files = options.files;
     if (options.includeSource) {
@@ -120,7 +119,7 @@ exports.publish = function publish(symbolSet, options) {
         }));
     }
     // regenerate the index with different relative links, used in the index pages
-    Link.base = "";
+    Link.base = "../----/";
     // TODO: don't access this damn Link
     index = classesTemplate.expand({ // kept in memory
         classesLink: classesLink,
@@ -150,10 +149,10 @@ exports.publish = function publish(symbolSet, options) {
     var filesIndex = Template(template.join("allfiles.tmpl").read().toString());
     var documentedFiles = symbols.filter(isaFile); // files that have file-level docs
     var allFiles = []; // not all files have file-level docs, but we need to list every one
-    for (var i = 0; i < files.length; i++) {
+    for (var i = 0, l = files.length; i < l; i++) {
         allFiles.push(new Symbol(files[i], [], "FILE", new DocComment("/** */")));
     }
-    for (var i = 0; i < documentedFiles.length; i++) {
+    for (var i = 0, l = documentedFiles.length; i < l; i++) {
         var offset = files.indexOf(documentedFiles[i].alias);
         allFiles[offset] = documentedFiles[i];
     }
@@ -168,9 +167,7 @@ exports.publish = function publish(symbolSet, options) {
         footer: footer,
         // title: Link().toFile("files.html").withText("File Index"),
         files: allFiles.map(function(symbol) {
-            var file = {
-               link: Link().toSrc(symbol.alias).withText(symbol.name)
-            };
+            var file = { link: Link().toSrc(symbol.alias).withText(symbol.name) };
             if (symbol.desc) file.description = symbol.desc;
             if (symbol.author) file.author = symbol.author;
             if (symbol.version) file.version = symbol.version;

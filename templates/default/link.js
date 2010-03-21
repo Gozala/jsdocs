@@ -15,26 +15,26 @@ var Link = exports.Link = function () {
     this.targetName = "";
 
     this.target = function(targetName) {
-        if (defined(targetName)) this.targetName = targetName;
+        if (targetName !== undefined) this.targetName = targetName;
         return this;
     }
     this.inner = function(inner) {
-        if (defined(inner)) this.innerName = inner;
+        if (inner  !== undefined) this.innerName = inner;
         return this;
     }
     this.withText = function(text) {
-        if (defined(text)) this.text = text;
+        if (text  !== undefined) this.text = text;
         return this;
     }
     this.toSrc = function(filename) {
-        if (defined(filename)) {
+        if (filename !== undefined) {
                     this.src = filename;
                     this.text = filename;
                 }
         return this;
     }
     this.toSymbol = function(alias) {
-        if (defined(alias)) this.alias = new String(alias);
+        if (alias  !== undefined) this.alias = alias.toString();
         return this;
     }
     this.toClass = function(alias) {
@@ -42,7 +42,7 @@ var Link = exports.Link = function () {
         return this.toSymbol(alias);
     }
     this.toFile = function(file) {
-        if (defined(file)) this.file = file;
+        if (file !== undefined) this.file = file;
         return this;
     }
 
@@ -59,7 +59,7 @@ var Link = exports.Link = function () {
                         thisLink.alias = symbolNames[i];
                         links.push(thisLink._makeSymbolLink(symbolNames[i]));
                     }
-                    return prematch+links.join("|")+postmatch;
+                    return prematch + links.join("|") + postmatch;
                 }
             );
         }
@@ -128,15 +128,12 @@ Link.prototype._makeSymbolLink = function(alias) {
 
 /** Create a link to a source file. */
 Link.prototype._makeSrcLink = function(srcFilePath) {
-    var target = (this.targetName)? " target=\""+this.targetName+"\"" : "";
-
+    var target = (this.targetName) ? ' target="' + this.targetName + '"' : '';
     // transform filepath into a filename
     var srcFile = srcFilePath.replace(/\.\.?[\\\/]/g, "").replace(/[:\\\/]/g, "_");
-    var outFilePath = Link.base + Link.srcDir + srcFile + Link.ext;
-
-
+    var outFilePath = Link.srcDir.join(srcFile + Link.ext);
     //if (!this.text) this.text = FilePath.fileName(srcFilePath);
-    return "<a href=\""+outFilePath+"\""+target+">"+this.text+"</a>";
+    return '<a href="--' + outFilePath + '"' + target + '>' + this.text + '</a>';
 }
 
 /** Create a link to a source file. */
@@ -147,4 +144,8 @@ Link.prototype._makeFileLink = function(filePath) {
 
     if (!this.text) this.text = filePath;
     return "<a href=\""+outFilePath+"\""+target+">"+this.text+"</a>";
+}
+
+exports.link = function link() {
+    
 }

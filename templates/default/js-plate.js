@@ -1,7 +1,7 @@
 /**
     @constructor
 */
-var Link = require("jsdocs/frame/link").Link;
+var Link = require("./link").Link;
 
 // TODO: fix this global dependencies
 var encoding, VERSION, copyright;
