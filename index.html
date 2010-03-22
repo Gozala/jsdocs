@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html manifest="cache.manifest">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <title>TaskHub</title>
+        <link type="text/css" rel="stylesheet" href="resources/css/style.css"/>
+        <script type="text/javascript" src="../require-js/lib/require.js"></script>
+    </head>
+    <body>
+        <script>
+            require.Sandbox({
+                global: window,
+                catalog: {
+                    "jsdocs": { path: "" },
+                    "json-template": { path: "../json-template/" }
+                }
+            }).main("templates/breeze/jsdocs")
+        </script>
+        <div id="main">
+
+        </div>
+        <div class="ribbon">
+            <a target="_blank" href="https://github.com/Gozala/jsdocs">Fork me on GitHub</a>
+        </div>
+    </body>
+</html>

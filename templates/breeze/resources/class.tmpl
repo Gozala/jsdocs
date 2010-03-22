@@ -1,0 +1,533 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset={encoding}" />
+        <meta name="generator" content="JsDoc Toolkit" />
+        <title>JsDoc Reference - {symbol.alias}</title>
+        <style type="text/css">
+        {style}
+        </style>
+    </head>
+    <body>
+        <!-- ============================== header ================================= -->
+        {header}
+        <!-- ============================== index ================================= -->
+        <div id="index">{index}</div>
+        {.section symbol}
+        <div id="content">
+            <h1 class="classTitle">{absoluteName} {alias}</h1>
+            <!-- ============================== class summary ========================== -->
+            <p class="description">
+                {.section version}<br/>Version {@}<br/>{.end}
+                {.section extend}
+                <br/>Extends
+                {.repeated section @} {@} {.end}
+                <br/>
+                {.end}
+                {description}
+                {.section defined}
+                <br/><i>Defined in: </i> {@}
+                {.end}
+            </p>
+            <!-- ============================== constructor summary ==================== -->
+            {.section classConstructor}
+            <table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class {alias}.">
+                <caption>{absoluteName} Summary</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Constructor Attributes</th>
+                        <th scope="col">Constructor Name and Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="attributes">
+                            {.section isPrivate}&lt;private&gt; {.end}
+                            {.section isInner}&lt;inner&gt; {.end}
+                            &nbsp;
+                        </td>
+                        <td class="nameDescription" {.section isHighlighted}style="color: red;"{.end}>
+                            <div class="fixedFont">
+                                <b>{link}</b>({.section paramsString}{@}{.end})
+                            </div>
+                            <div class="description">{description}</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {.end}
+            <!-- ============================== properties summary ===================== -->
+            {.section properties}
+            {.section own}
+            <table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class.">
+                <caption>Field Summary</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Field Attributes</th>
+                        <th scope="col">Field Name and Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {.repeated section @}
+                    <tr>
+                        <td class="attributes">
+                            {.section isPrivate}&lt;private&gt; {.end}
+                            {.section isInner}&lt;inner&gt; {.end}
+                            {.section isStatic}&lt;static&gt; {.end}
+                            {.section isConstant}&lt;constant&gt; {.end}
+                            &nbsp;
+                        </td>
+                        <td class="nameDescription">
+                            <div class="fixedFont">
+                                {.section memberOf}{@}.{.end}<b>{link}</b>
+                            </div>
+                            <div class="description">{description}</div>
+                        </td>
+                    </tr>
+                    {.end}
+                </tbody>
+            </table>
+            {.end}
+            {.section inherited}
+            <dl class="inheritsList">
+                {.repeated section @}
+                <dt>Fields inherited from class {link}: </dt>
+                {.repeated section properties}<dd>{link}</dd>{.end}
+                {.end}
+            </dl>
+            {.end}
+            {.end}
+            <!-- ============================== methods summary ======================== -->
+            {.section methods}
+            {.section own}
+            <table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class.">
+                <caption>Method Summary</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Method Attributes</th>
+                        <th scope="col">Method Name and Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {.repeated section @}
+                    <tr>
+                        <td class="attributes">
+                            {.section isPrivate}&lt;private&gt; {.end}
+                            {.section isInner}&lt;inner&gt; {.end}
+                            {.section isStatic}&lt;static&gt; {.end}
+                            &nbsp;
+                        </td>
+                        <td class="nameDescription">
+                            <div class="fixedFont">
+                                {.section memberOf}{@}.{.end}<b>{link}</b>({.section paramsString}{@}{.end})
+                            </div>
+                            <div class="description">{description}</div>
+                        </td>
+                    </tr>
+                    {.end}
+                </tbody>
+            </table>
+            {.end}
+            {.section inherited}
+            <dl class="inheritsList">
+                {.repeated section @}
+                <dt>Methods inherited from class {link}: </dt>
+                {.repeated section methods}<dd>{link}</dd>{.end}
+                {.end}
+            </dl>
+            {.end}
+            {.end}
+            <!-- ============================== events summary ======================== -->
+            {.section events}
+            {.section own}
+            <table class="summaryTable" cellspacing="0" summary="A summary of the events documented in the class.">
+                <caption>Event Summary</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Event Attributes</th>
+                        <th scope="col">Event Name and Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {.repeated section @}
+                    <tr>
+                        <td class="attributes">
+                            {.section isPrivate}&lt;private&gt; {.end}
+                            {.section isInner}&lt;inner&gt; {.end}
+                            {.section isStatic}&lt;static&gt; {.end}
+                            &nbsp;
+                        </td>
+                        <td class="nameDescription">
+                            <div class="fixedFont">
+                                {.section memberOf}{@}.{.end}<b>{link}</b>({.section paramsString}{@}{.end})
+                            </div>
+                            <div class="description">{description}</div>
+                        </td>
+                    </tr>
+                    {.end}
+                </tbody>
+            </table>
+            {.end}
+            {.section inherited}
+            <dl class="inheritsList">
+                {.repeated section @}
+                <dt>Events inherited from class {link}: </dt>
+                {.repeated section methods}<dd>{link}</dd>{.end}
+                {.end}
+            </dl>
+            {.end}
+            {.end}
+            <!-- ============================== constructor details ==================== -->
+            {.section classConstructor}
+            <div class="details">
+                <a name="constructor"> </a>
+                <div class="sectionTitle">
+                    {absoluteName} Detail
+                </div>
+                <div class="fixedFont">
+                    {.section isPrivate}&lt;private&gt; {.end}
+                    {.section isInner}&lt;inner&gt; {.end}
+                    <b>{alias}</b>({.section paramsString}{@}{.end})
+                </div>
+                <div class="description">
+                    {description}
+                    {.section author}<br/><i>Author: </i>{author}.{.end}
+                </div>
+                {.section examples}
+                {.repeated section @}
+                <pre class="code">{@}</pre>
+                {.end}
+                {.end}
+                {.section params}
+                <dl class="detailList">
+                    <dt class="heading">Parameters:</dt>
+                    {.repeated section @}
+                    <dt>
+                        {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                        <b>{name}</b>
+                        {.section isOptional}<i>Optional</i>{.end}
+                        {.section defaultValue}<i>, Default: {@}</i>{.end}
+                    </dt>
+                    <dd>{description}</dd>
+                    {.end}
+                </dl>
+                {.end}
+                {.section deprecated}
+                <dl class="detailList">
+                    <dt class="heading">Deprecated:</dt>
+                    <dt>{@}</dt>
+                </dl>
+                {.end}
+                {.section since}
+                <dl class="detailList">
+                    <dt class="heading">Since:</dt>
+                    <dd>{@}</dd>
+                </dl>
+                {.end}
+                {.section exceptions}
+                <dl class="detailList">
+                    <dt class="heading">Throws:</dt>
+                    {.repeated section @}
+                    <dt>
+                        {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                        <b>{name}</b>
+                    </dt>
+                    <dd>{description}</dd>
+                    {.end}
+                </dl>
+                {.end}
+                {.section returns}
+                <dl class="detailList">
+                    <dt class="heading">Returns:</dt>
+                    {.repeated section @}
+                    <dt>
+                        {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                        <b>{name}</b>
+                    </dt>
+                    <dd>{description}</dd>
+                    {.end}
+                </dl>
+                {.end}
+                {.section requires}
+                <dl class="detailList">
+                    <dt class="heading">Requires:</dt>
+                    {.repeated section @}
+                    <dd>{@}</dd>
+                    {.end}
+                </dl>
+                {.end}
+                {.section see}
+                <dl class="detailList">
+                    <dt class="heading">See:</dt>
+                    {.repeated section @}
+                    <dd>{@}</dd>
+                    {.end}
+                </dl>
+                {.end}
+            </div>
+            {.end}
+            <!-- ============================== field details ========================== -->
+            {.section properties}
+            {.section own}
+            <div class="sectionTitle">Field Detail</div>
+            {.repeated section @}
+            <a name="{linkName}"> </a>
+            <div class="fixedFont">
+                {.section isPrivate}&lt;private&gt; {.end}
+                {.section isInner}&lt;inner&gt; {.end}
+                {.section isStatic}&lt;static&gt; {.end}
+                {.section isConstant}&lt;constant&gt; {.end}
+                {.section type}<span class="light">{link}</span>{.end}
+                {.section memberOf}<span class="light">{@}.</span>{.end}<b>{name}</b>
+            </div>
+            <div class="description">
+                {description}
+                {.section src}
+                <br/>
+                <i>Defined in: </i> {link}.
+                {.end}
+                {.section author}
+                <br/>
+                <i>Author: </i>{author}.
+                {.end}
+            </div>
+            {.section examples}
+            {.repeated section @}
+            <pre class="code">{@}</pre>
+            {.end}
+            {.end}
+            {.section deprecated}
+            <dl class="detailList">
+                <dt class="heading">Deprecated:</dt>
+                <dt>{@}</dt>
+            </dl>
+            {.end}
+            {.section since}
+            <dl class="detailList">
+                <dt class="heading">Since:</dt>
+                <dd>{@}</dd>
+            </dl>
+            {.end}
+            {.section see}
+            <dl class="detailList">
+                <dt class="heading">See:</dt>
+                {.repeated section @}
+                <dd>{@}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section defaultValue}
+            <dl class="detailList">
+                <dt class="heading">Default Value:</dt>
+                <dd>{@}</dd>
+            </dl>
+            {.end}
+            <hr />
+            {.end}
+            {.end}
+            {.end}
+            <!-- ============================== method details ========================= -->
+            {.section methods}
+            {.section own}
+            <div class="sectionTitle">Method Detail</div>
+            {.repeated section @}
+            <a name="{linkName}"> </a>
+            <div class="fixedFont">
+                {.section isPrivate}&lt;private&gt; {.end}
+                {.section isInner}&lt;inner&gt; {.end}
+                {.section isStatic}&lt;static&gt; {.end}
+
+                {.section type}<span class="light">{link}</span>{.end}
+                {.section memberOf}<span class="light">{@}.</span>{.end}<b>{name}</b>({.section paramsString}{@}{.end})
+            </div>
+            <div class="description">
+                {description}
+                {.section src}
+                <br/>
+                <i>Defined in: </i> {link}.
+                {.end}
+                {.section author}
+                <br/>
+                <i>Author: </i>{author}.
+                {.end}
+            </div>
+            {.section examples}
+            {.repeated section @}
+            <pre class="code">{@}</pre>
+            {.end}
+            {.end}
+            {.section params}
+            <dl class="detailList">
+                <dt class="heading">Parameters:</dt>
+                {.repeated section @}
+                <dt>{.section type}<span class="light fixedFont">{link}</span> : {.end}
+                    <b>{name}</b>
+                    {.section isOptional}<i>Optional</i>{.end}
+                    {.section defaultValue}<i>, Default: {@}</i>{.end}
+                </dt>
+                <dd>{description}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section deprecated}
+            <dl class="detailList">
+                <dt class="heading">Deprecated:</dt>
+                <dt>{@}</dt>
+            </dl>
+            {.end}
+            {.section since}
+            <dl class="detailList">
+                <dt class="heading">Since:</dt>
+                <dd>{@}</dd>
+            </dl>
+            {.end}
+            {.section exceptions}
+            <dl class="detailList">
+                <dt class="heading">Throws:</dt>
+                {.repeated section @}
+                <dt>
+                    {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                    <b>{name}</b>
+                </dt>
+                <dd>{description}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section returns}
+            <dl class="detailList">
+                <dt class="heading">Returns:</dt>
+                {.repeated section @}
+                <dt>
+                    {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                    <b>{name}</b>
+                </dt>
+                <dd>{description}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section requires}
+            <dl class="detailList">
+                <dt class="heading">Requires:</dt>
+                {.repeated section @}
+                <dd>{@}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section see}
+            <dl class="detailList">
+                <dt class="heading">See:</dt>
+                {.repeated section @}
+                <dd>{@}</dd>
+                {.end}
+            </dl>
+            {.end}
+            <hr />
+            {.end}
+            {.end}
+            {.end}
+            <!-- ============================== event details ========================= -->
+            {.section events}
+            {.section own}
+            <div class="sectionTitle">Event Detail</div>
+            {.repeated section @}
+            <a name="{linkName}"> </a>
+            <div class="fixedFont">
+                {.section isPrivate}&lt;private&gt; {.end}
+                {.section isInner}&lt;inner&gt; {.end}
+                {.section isStatic}&lt;static&gt; {.end}
+
+                {.section type}<span class="light">{link}</span>{.end}
+                {.section memberOf}<span class="light">{@}.</span>{.end}<b>{name}</b>({.section paramsString}{@}{.end})
+            </div>
+            <div class="description">
+                {description}
+                {.section src}
+                <br/>
+                <i>Defined in: </i> {link}.
+                {.end}
+                {.section author}
+                <br/>
+                <i>Author: </i>{author}.
+                {.end}
+            </div>
+            {.section examples}
+            {.repeated section @}
+            <pre class="code">{@}</pre>
+            {.end}
+            {.end}
+            {.section params}
+            <dl class="detailList">
+                <dt class="heading">Parameters:</dt>
+                {.repeated section @}
+                <dt>{.section type}<span class="light fixedFont">{link}</span> : {.end}
+                    <b>{name}</b>
+                    {.section isOptional}<i>Optional</i>{.end}
+                    {.section defaultValue}<i>, Default: {@}</i>{.end}
+                </dt>
+                <dd>{description}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section deprecated}
+            <dl class="detailList">
+                <dt class="heading">Deprecated:</dt>
+                <dt>{@}</dt>
+            </dl>
+            {.end}
+            {.section since}
+            <dl class="detailList">
+                <dt class="heading">Since:</dt>
+                <dd>{@}</dd>
+            </dl>
+            {.end}
+            {.section exceptions}
+            <dl class="detailList">
+                <dt class="heading">Throws:</dt>
+                {.repeated section @}
+                <dt>
+                    {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                    <b>{name}</b>
+                </dt>
+                <dd>{description}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section returns}
+            <dl class="detailList">
+                <dt class="heading">Returns:</dt>
+                {.repeated section @}
+                <dt>
+                    {.section type}<span class="light fixedFont">{link}</span> : {.end}
+                    <b>{name}</b>
+                </dt>
+                <dd>{description}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section requires}
+            <dl class="detailList">
+                <dt class="heading">Requires:</dt>
+                {.repeated section @}
+                <dd>{@}</dd>
+                {.end}
+            </dl>
+            {.end}
+            {.section see}
+            <dl class="detailList">
+                <dt class="heading">See:</dt>
+                {.repeated section @}
+                <dd>{@}</dd>
+                {.end}
+            </dl>
+            {.end}
+            <hr />
+            {.end}
+            {.end}
+            {.end}
+        </div>
+        {.end}
+        <!-- ============================== footer ================================= -->
+        {footer}
+    </body>
+</html>
